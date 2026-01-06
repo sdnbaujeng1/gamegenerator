@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Generator K3S BEJI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome untuk Icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: #1e293b;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* --- DYNAMIC BACKGROUND SHAPES (UPDATED) --- */
+        .background-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Di belakang konten */
+            overflow: hidden;
+            pointer-events: none; /* Tidak mengganggu klik */
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.15; /* Sedikit lebih terlihat */
+            filter: blur(1px);
+        }
+
+        /* Tipe Shape */
+        .shape-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #3b82f6; /* Blue */
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .shape-square {
+            width: 60px;
+            height: 60px;
+            background: #8b5cf6; /* Purple */
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .shape-triangle {
+            width: 0;
+            height: 0;
+            border-left: 40px solid transparent;
+            border-right: 40px solid transparent;
+            border-bottom: 70px solid #10b981; /* Green */
+            filter: drop-shadow(0 4px 6px rgba(16, 185, 129, 0.3));
+        }
+
+        .shape-x {
+            font-size: 60px;
+            font-weight: 900;
+            color: #f59e0b; /* Amber */
+            text-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);
+            line-height: 1;
+            font-family: sans-serif;
+        }
+
+        /* PERBAIKAN ANIMASI: Gerak Acak */
+        .s1 { top: 15%; left: 5%; animation: float-up 18s ease-in-out infinite; }
+        .s2 { top: 20%; left: 85%; animation: float-down 23s ease-in-out infinite; }
+        .s3 { top: 85%; left: 10%; animation: float-up 25s ease-in-out infinite; }
+        .s4 { top: 65%; left: 80%; animation: float-down 20s ease-in-out infinite; }
+        .s5 { top: 40%; left: 50%; animation: float-up 28s ease-in-out infinite; }
+        .s6 { top: 90%; left: 45%; animation: float-down 24s ease-in-out infinite; }
+        .s7 { top: 15%; left: 40%; animation: float-up 31s ease-in-out infinite; }
+        .s8 { top: 50%; left: 5%; animation: float-down 26s ease-in-out infinite; }
+        .s9 { top: 5%; left: 60%; animation: float-up 21s ease-in-out infinite; }
+        .s10 { top: 80%; left: 90%; animation: float-down 22s ease-in-out infinite; }
+
+        @keyframes float-up {
+            0% { transform: translateY(0) rotate(0deg) scale(1); }
+            50% { transform: translateY(-120px) rotate(180deg) scale(1.1); }
+            100% { transform: translateY(0) rotate(360deg) scale(1); }
+        }
+
+        @keyframes float-down {
+            0% { transform: translateY(0) rotate(0deg) scale(1); }
+            50% { transform: translateY(120px) rotate(-180deg) scale(0.9); }
+            100% { transform: translateY(0) rotate(-360deg) scale(1); }
+        }
+
+        /* --- EXISTING STYLES --- */
+        .landscape-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .narration-box {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-left: 5px solid #3b82f6;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 0 15px 15px 0;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .panel-soal {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .question-box {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 8px;
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 10px;
+            min-height: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #0369a1;
+            font-size: 0.85rem;
+            position: relative;
+        }
+
+        .question-badge {
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #0ea5e9;
+            color: white;
+            font-size: 8px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .panel-progress-container {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        .panel-progress-track {
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .panel-progress-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 1s ease-in-out;
+            position: relative;
+        }
+
+        .fill-left { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+        .fill-right { background: linear-gradient(90deg, #6366f1, #818cf8); }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            top: -10px;
+            z-index: 9999;
+            animation: fall 3s linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5000;
+        }
+        
+        .split-screen {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            flex-grow: 1;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* JSON Code Block Style */
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 11px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- DYNAMIC BACKGROUND SHAPES -->
+    <div class="background-shapes">
+        <div class="shape shape-circle s1"></div>
+        <div class="shape shape-triangle s2"></div>
+        <div class="shape shape-square s3"></div>
+        <div class="shape shape-x s4">✕</div>
+        <div class="shape shape-circle s5"></div>
+        <div class="shape shape-triangle s6"></div>
+        <div class="shape shape-x s7">✕</div>
+        <div class="shape shape-square s8"></div>
+        <div class="shape shape-circle s9"></div>
+        <div class="shape shape-square s10"></div>
+    </div>
+
+    <!-- Section: Login -->
+    <div id="login-section" class="flex items-center justify-center h-screen">
+        <div class="bg-white/90 backdrop-blur-lg p-8 rounded-2xl shadow-2xl w-96 transform transition-all hover:scale-105 border border-white/50">
+            <div class="text-center mb-6">
+                <!-- Custom Logo URL -->
+                <img src="https://i.imghippo.com/files/xYek7566NhY.png" alt="Logo K3S" class="h-24 mx-auto mb-4 drop-shadow-md">
+                <h1 class="text-2xl font-black text-gray-800 uppercase tracking-tight">Game Generator</h1>
+                <p class="text-blue-600 font-bold tracking-widest">BEJI PASURUAN</p>
+            </div>
+            <div class="space-y-4">
+                <input type="text" id="username" placeholder="Username" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-white/80">
+                <input type="password" id="password" placeholder="Password" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-white/80">
+                <button onclick="handleLogin()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg hover:shadow-blue-500/30">MASUK SISTEM</button>
+            </div>
+            <p id="login-error" class="text-red-500 text-xs mt-4 text-center hidden">Maaf, Username atau Password salah!</p>
+        </div>
+    </div>
+
+    <!-- Section: Generator Form -->
+    <div id="generator-section" class="hidden min-h-screen p-8">
+        <div class="max-w-6xl mx-auto bg-white/95 backdrop-blur-sm rounded-3xl shadow-xl p-10 border border-white/60">
+            <div class="flex items-center gap-4 mb-8 border-b pb-6">
+                <img src="https://i.imghippo.com/files/xYek7566NhY.png" alt="Logo K3S" class="h-16">
+                <div>
+                    <h2 class="text-2xl font-black text-gray-800">GENERATOR JSON CONFIG</h2>
+                    <p class="text-gray-500 text-sm">BEJI PASURUAN - Media Interaktif Creator</p>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Kolom Kiri -->
+                <div class="space-y-5">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Nama Aplikasi</label>
+                        <input type="text" id="gen-app-name" placeholder="Masukkan nama game..." class="w-full border p-3 rounded-xl bg-gray-50 focus:ring-2 focus:ring-blue-200 outline-none">
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Mata Pelajaran</label>
+                            <select id="gen-subject" class="w-full border p-3 rounded-xl bg-gray-50">
+                                <option value="Pendidikan Agama">Pendidikan Agama</option>
+                                <option value="Pendidikan Pancasila (PPKn)">Pendidikan Pancasila (PPKn)</option>
+                                <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+                                <option value="Matematika">Matematika</option>
+                                <option value="IPA">IPA</option>
+                                <option value="IPS">IPS</option>
+                                <option value="PJOK">PJOK</option>
+                                <option value="Seni Budaya">Seni Budaya</option>
+                                <option value="Bahasa Inggris">Bahasa Inggris</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Kelas</label>
+                            <select id="gen-grade" class="w-full border p-3 rounded-xl bg-gray-50">
+                                <option value="1">Kelas 1</option>
+                                <option value="2">Kelas 2</option>
+                                <option value="3">Kelas 3</option>
+                                <option value="4">Kelas 4</option>
+                                <option value="5">Kelas 5</option>
+                                <option value="6">Kelas 6</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Tujuan Pelajaran</label>
+                        <textarea id="gen-objective" class="w-full border p-3 rounded-xl bg-gray-50 h-24" placeholder="Apa tujuan dari permainan ini?"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Link Logo Kustom (Opsional)</label>
+                        <input type="text" id="gen-logo" placeholder="https://..." class="w-full border p-3 rounded-xl bg-gray-50 text-sm">
+                        <p class="text-[10px] text-gray-400 mt-1">*Biarkan kosong untuk menggunakan logo default K3S Beji Pasuruan.</p>
+                    </div>
+                </div>
+
+                <!-- Kolom Kanan -->
+                <div class="space-y-5">
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Materi Spesifik</label>
+                        <input type="text" id="gen-material" class="w-full border p-3 rounded-xl bg-gray-50" placeholder="Contoh: Perkalian Bilangan Cacah">
+                    </div>
+
+                    <!-- FITUR GAMBAR -->
+                    <div class="flex items-center gap-3 bg-indigo-50 p-3 rounded-xl border border-indigo-100 transition hover:shadow-sm">
+                        <div class="bg-white p-2 rounded-lg text-indigo-600 shadow-sm border border-indigo-50">
+                            <i class="fa-regular fa-image text-lg"></i>
+                        </div>
+                        <label class="flex-1 cursor-pointer select-none">
+                            <span class="block text-sm font-bold text-gray-700">Fitur Gambar Soal</span>
+                            <span class="block text-[10px] text-gray-500">Tampilkan ilustrasi gambar pada setiap pertanyaan</span>
+                        </label>
+                        <input type="checkbox" id="gen-images" class="w-6 h-6 text-indigo-600 rounded focus:ring-indigo-500 border-gray-300">
+                    </div>
+
+                    <!-- JENIS VISUAL GAME (NEW) -->
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Jenis Visual Game</label>
+                        <div class="flex flex-wrap gap-4 p-3 bg-gray-50 rounded-xl border border-gray-200">
+                            <label class="flex items-center gap-2 cursor-pointer text-sm">
+                                <input type="checkbox" name="gametype" value="Flat" class="w-4 h-4 text-blue-600 rounded" checked> Flat
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer text-sm">
+                                <input type="checkbox" name="gametype" value="2D" class="w-4 h-4 text-blue-600 rounded"> 2D
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer text-sm">
+                                <input type="checkbox" name="gametype" value="3D" class="w-4 h-4 text-blue-600 rounded"> 3D
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                         <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Tingkat Kesulitan</label>
+                            <div class="flex flex-col gap-2 p-3 bg-gray-50 rounded-xl h-full border border-gray-200">
+                                <label class="flex items-center gap-2 cursor-pointer text-sm"><input type="checkbox" name="diff" value="LOTS" class="w-4 h-4 text-blue-600"> LOTS</label>
+                                <label class="flex items-center gap-2 cursor-pointer text-sm"><input type="checkbox" name="diff" value="MOTS" class="w-4 h-4 text-blue-600"> MOTS</label>
+                                <label class="flex items-center gap-2 cursor-pointer text-sm"><input type="checkbox" name="diff" value="HOTS" class="w-4 h-4 text-blue-600"> HOTS</label>
+                                <label class="flex items-center gap-2 cursor-pointer text-sm"><input type="checkbox" name="diff" value="LITERASI" class="w-4 h-4 text-blue-600"> LITERASI</label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Mode Interaksi</label>
+                             <div class="flex flex-col gap-2 p-3 bg-gray-50 rounded-xl h-full border border-gray-200">
+                                <label class="flex items-center gap-2 cursor-pointer text-sm font-medium">
+                                    <input type="radio" name="interaction" value="abcd" class="w-4 h-4 text-blue-600" checked> 
+                                    Pilihan Ganda (A-D)
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer text-sm font-medium">
+                                    <input type="radio" name="interaction" value="abc" class="w-4 h-4 text-blue-600"> 
+                                    Pilihan Ganda (A-C)
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer text-sm font-medium">
+                                    <input type="radio" name="interaction" value="calc" class="w-4 h-4 text-blue-600"> 
+                                    Kalkulator Interaktif
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Jumlah Soal</label>
+                            <input type="number" id="gen-count" value="10" class="w-full border p-3 rounded-xl bg-gray-50">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Footer</label>
+                            <input type="text" id="gen-footer" value="K3S BEJI PASURUAN © 2026" class="w-full border p-3 rounded-xl bg-gray-50">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-10">
+                <button onclick="generateNarration()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 rounded-2xl font-black text-xl hover:from-blue-700 hover:to-indigo-700 shadow-xl transition-all flex items-center justify-center gap-3 transform hover:scale-[1.01]">
+                    <span>✨ GENERATE JSON SPEC</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section: Output Narasi & Visualisasi (Landscape Mode) -->
+    <div id="narration-section" class="hidden landscape-container">
+        <!-- Header Output -->
+        <div class="bg-white/95 backdrop-blur-md border-b p-4 flex justify-between items-center shadow-sm h-16">
+            <div class="flex items-center gap-3">
+                <img src="https://i.imghippo.com/files/xYek7566NhY.png" class="h-8">
+                <h2 class="text-xl font-black text-slate-800">HASIL OUTPUT (JSON)</h2>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="showInstructions()" class="bg-yellow-100 text-yellow-700 border border-yellow-300 px-4 py-2 rounded-lg font-bold text-sm flex items-center gap-2 hover:bg-yellow-200">
+                    <i class="fa-solid fa-book-open"></i> Panduan
+                </button>
+                <button onclick="backToGenerator()" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-bold text-sm hover:bg-gray-300">Kembali</button>
+                <button onclick="triggerWin()" class="bg-green-600 text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-green-700">Simulasi</button>
+            </div>
+        </div>
+
+        <div class="flex flex-1 overflow-hidden p-4 gap-6 relative z-10">
+            <!-- Left: Narration Content with Copy Button -->
+            <div class="w-1/3 flex flex-col h-full relative">
+                <div class="narration-box flex-1 overflow-y-auto mb-0 pr-2">
+                    <div class="flex justify-between items-center mb-2 sticky top-0 bg-white/95 backdrop-blur z-10 py-2 border-b">
+                        <h3 class="font-bold text-blue-700 text-lg">📄 JSON Prompt</h3>
+                        <button onclick="copyToClipboard()" id="btn-copy" class="bg-blue-600 text-white px-3 py-1 rounded-md text-xs font-bold flex items-center gap-2 hover:bg-blue-700 transition-all shadow-md">
+                            <i class="fa-regular fa-copy"></i> <span id="btn-copy-text">Salin JSON</span>
+                        </button>
+                    </div>
+                    
+                    <div class="p-2 bg-blue-50 rounded border border-blue-200 text-xs text-blue-700 mb-2">
+                        Tekan tombol "Salin JSON" di atas, lalu tempel (Paste) ke AI (Gemini/ChatGPT/Canva).
+                    </div>
+                    
+                    <div class="bg-slate-900 p-3 rounded border border-gray-600 overflow-x-auto">
+                        <pre id="narration-text" class="text-xs leading-relaxed text-green-400 font-mono select-all">
+                            <!-- Konten JSON Akan Muncul Di Sini -->
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Bar Visualisasi & Layout Preview -->
+            <div class="w-2/3 flex flex-col gap-4">
+                <div class="bg-white/95 backdrop-blur-md p-4 rounded-2xl shadow-sm border flex flex-col flex-1 relative">
+                    <div class="absolute top-2 right-2 bg-blue-100 text-blue-800 text-[10px] font-bold px-2 py-1 rounded">PREVIEW TATA LETAK</div>
+                    
+                    <div class="flex justify-between items-end mb-4">
+                        <div class="flex items-center gap-3">
+                            <!-- ICON CONTAINER -->
+                            <div id="visual-icon" class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-3xl shadow-sm border border-blue-100">
+                                🎮
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-bold text-gray-400 uppercase">Judul Aplikasi</span>
+                                <div class="text-xl font-black text-blue-600 leading-none" id="visual-app-name">NAMA GAME</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-[10px] font-bold text-gray-400 uppercase">Kelas</span>
+                            <div class="text-sm font-bold text-gray-600" id="visual-grade">Kelas X</div>
+                        </div>
+                    </div>
+
+                    <!-- Split Screen Preview with Individual Progress Bars -->
+                    <div class="split-screen mt-2">
+                        <!-- Panel Kiri -->
+                        <div class="panel-soal border-blue-200 bg-blue-50/20">
+                            <div class="w-full">
+                                <span class="bg-blue-600 text-white text-[9px] px-2 py-0.5 rounded-full mb-2 inline-block">PLAYER A (KIRI)</span>
+                                
+                                <!-- Progress Bar A (Kiri) -->
+                                <div class="panel-progress-container px-4">
+                                    <div class="flex justify-between text-[9px] text-blue-600 font-bold mb-1">
+                                        <span>PROGRES TIM A</span>
+                                        <span id="score-text-a">0%</span>
+                                    </div>
+                                    <div class="panel-progress-track">
+                                        <div id="visual-bar-a" class="panel-progress-fill fill-left"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Area Soal Di Atas -->
+                                <div class="question-box">
+                                    <div class="question-badge">SOAL ACAK A</div>
+                                    <span id="preview-content-a" class="text-center px-2">Pertanyaan Acak A Muncul Disini</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Tombol Interaksi Di Bawah -->
+                            <div class="w-full mt-2">
+                                <div class="p-2 border-2 border-dashed border-blue-300 rounded bg-white w-full">
+                                    <div class="text-[10px] text-center text-blue-400 font-mono font-bold" id="preview-buttons-a">
+                                        [TOMBOL]
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Panel Kanan -->
+                        <div class="panel-soal border-indigo-200 bg-indigo-50/20">
+                            <div class="w-full">
+                                <span class="bg-indigo-600 text-white text-[9px] px-2 py-0.5 rounded-full mb-2 inline-block">PLAYER B (KANAN)</span>
+
+                                <!-- Progress Bar B (Kanan) -->
+                                <div class="panel-progress-container px-4">
+                                    <div class="flex justify-between text-[9px] text-indigo-600 font-bold mb-1">
+                                        <span>PROGRES TIM B</span>
+                                        <span id="score-text-b">0%</span>
+                                    </div>
+                                    <div class="panel-progress-track">
+                                        <div id="visual-bar-b" class="panel-progress-fill fill-right"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Area Soal Di Atas -->
+                                <div class="question-box" style="background: #eef2ff; border-color: #c7d2fe; color: #4338ca;">
+                                    <div class="question-badge" style="background: #6366f1;">SOAL ACAK B</div>
+                                    <span id="preview-content-b" class="text-center px-2">Pertanyaan Acak B Muncul Disini</span>
+                                </div>
+                            </div>
+
+                            <!-- Tombol Interaksi Di Bawah -->
+                            <div class="w-full mt-2">
+                                <div class="p-2 border-2 border-dashed border-indigo-300 rounded bg-white w-full">
+                                    <div class="text-[10px] text-center text-indigo-400 font-mono font-bold" id="preview-buttons-b">
+                                        [TOMBOL]
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-2 text-center flex items-center justify-center gap-2">
+                        <img id="visual-footer-logo" src="https://i.imghippo.com/files/xYek7566NhY.png" class="h-4">
+                        <p class="text-[10px] text-gray-400" id="visual-footer">FOOTER CONTENT</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Instruction Modal -->
+    <div id="instruction-modal" class="hidden modal-overlay">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full mx-4 overflow-hidden border border-white/40">
+            <div class="bg-blue-600 p-4 text-white flex justify-between items-center">
+                <h3 class="font-bold text-lg">📚 Panduan Pembuatan Aplikasi</h3>
+                <button onclick="closeInstructions()" class="text-white hover:text-gray-200 font-bold text-xl">&times;</button>
+            </div>
+            <div class="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
+                <div class="flex items-start gap-4">
+                    <div class="bg-blue-100 text-blue-700 font-bold w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">1</div>
+                    <div>
+                        <h4 class="font-bold text-gray-800">Generate JSON</h4>
+                        <p class="text-sm text-gray-600">Isi formulir lengkap lalu klik tombol <b>"Generate JSON Spec"</b>.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4">
+                    <div class="bg-blue-100 text-blue-700 font-bold w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">2</div>
+                    <div>
+                        <h4 class="font-bold text-gray-800">Salin Otomatis</h4>
+                        <p class="text-sm text-gray-600">Klik tombol ikon <b>Salin JSON</b> di atas kotak teks hasil.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4">
+                    <div class="bg-blue-100 text-blue-700 font-bold w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">3</div>
+                    <div>
+                        <h4 class="font-bold text-gray-800">Paste di AI</h4>
+                        <p class="text-sm text-gray-600">Buka Gemini, ChatGPT, atau Canva, lalu <b>Paste (Tempel)</b> JSON tersebut. AI akan membuatkan kode HTML lengkap.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4 border-t bg-gray-50 text-right">
+                <button onclick="closeInstructions()" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-700">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Welcome Modal -->
+    <div id="welcome-modal" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-md flex items-center justify-center z-[2000] p-4">
+        <div class="bg-white p-10 rounded-3xl shadow-2xl text-center max-w-lg border-t-8 border-blue-600 relative overflow-hidden">
+            <!-- Modal Background Shapes -->
+            <div class="absolute top-0 left-0 w-full h-full z-0 opacity-10 pointer-events-none">
+                <div class="shape shape-circle" style="top:10%; left:10%"></div>
+                <div class="shape shape-square" style="bottom:10%; right:10%"></div>
+            </div>
+            
+            <div class="relative z-10">
+                <img src="https://i.imghippo.com/files/xYek7566NhY.png" class="h-24 mx-auto mb-6">
+                <h2 class="text-3xl font-black text-gray-800 mb-2">AKSES BERHASIL!</h2>
+                <p class="text-gray-600 mb-8 leading-relaxed">Selamat datang di <b>GENERATOR MEDIA K3S BEJI PASURUAN</b>. Siap membuat media pembelajaran interaktif?</p>
+                <button onclick="closeModal()" class="bg-blue-600 text-white px-10 py-4 rounded-2xl font-bold hover:bg-blue-700 transition w-full shadow-lg shadow-blue-200">MULAI GENERATE</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const DEFAULT_LOGO = "https://i.imghippo.com/files/xYek7566NhY.png";
+
+        function handleLogin() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            
+            if(user === "game" && pass === "beji") {
+                document.getElementById('login-section').classList.add('hidden');
+                document.getElementById('generator-section').classList.remove('hidden');
+                document.getElementById('welcome-modal').classList.remove('hidden');
+            } else {
+                const err = document.getElementById('login-error');
+                err.classList.remove('hidden');
+                setTimeout(() => err.classList.add('hidden'), 3000);
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('welcome-modal').classList.add('hidden');
+        }
+
+        function showInstructions() {
+            document.getElementById('instruction-modal').classList.remove('hidden');
+        }
+        
+        function closeInstructions() {
+            document.getElementById('instruction-modal').classList.add('hidden');
+        }
+
+        function copyToClipboard() {
+            const text = document.getElementById('narration-text').innerText;
+            
+            // Fallback method using textarea (lebih robust untuk iframe/sandbox)
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";  // Avoid scrolling to bottom
+            textArea.style.left = "-9999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showCopyFeedback();
+                } else {
+                    // Try Navigator API if execCommand fails
+                    navigator.clipboard.writeText(text).then(showCopyFeedback).catch(err => {
+                        console.error('Failed to copy', err);
+                        alert("Gagal menyalin otomatis. Silakan blok teks dan salin manual (Ctrl+C).");
+                    });
+                }
+            } catch (err) {
+                console.error('Fallback: Oops, unable to copy', err);
+                alert("Gagal menyalin. Silakan blok teks dan CTRL+C.");
+            }
+            
+            document.body.removeChild(textArea);
+        }
+
+        function showCopyFeedback() {
+            const btn = document.getElementById('btn-copy');
+            const btnText = document.getElementById('btn-copy-text');
+            const originalText = "Salin JSON";
+            
+            btn.classList.remove('bg-blue-600');
+            btn.classList.add('bg-green-600');
+            btnText.innerText = "Tersalin!";
+            
+            setTimeout(() => {
+                btn.classList.remove('bg-green-600');
+                btn.classList.add('bg-blue-600');
+                btnText.innerText = originalText;
+            }, 2000);
+        }
+
+        function getSubjectIcon(subject) {
+            const icons = {
+                'Pendidikan Agama': '🕌',
+                'Pendidikan Pancasila (PPKn)': '🇮🇩',
+                'Bahasa Indonesia': '📚',
+                'Matematika': '📐',
+                'IPA': '🔬',
+                'IPS': '🌍',
+                'PJOK': '⚽',
+                'Seni Budaya': '🎨',
+                'Bahasa Inggris': '🅰️'
+            };
+            return icons[subject] || '🎓';
+        }
+
+        function generateNarration() {
+            const appName = document.getElementById('gen-app-name').value || "Project Tanpa Nama";
+            const subject = document.getElementById('gen-subject').value;
+            const grade = document.getElementById('gen-grade').value;
+            const objective = document.getElementById('gen-objective').value || "Belum ditentukan";
+            const material = document.getElementById('gen-material').value || "Materi Umum";
+            const count = document.getElementById('gen-count').value;
+            const footer = document.getElementById('gen-footer').value;
+            const customLogo = document.getElementById('gen-logo').value.trim() || DEFAULT_LOGO;
+            const useImages = document.getElementById('gen-images').checked;
+            
+            // Checkboxes
+            const diffs = Array.from(document.querySelectorAll('input[name="diff"]:checked')).map(cb => cb.value);
+            const difficultyText = diffs.length > 0 ? diffs.join(", ") : "Standar";
+
+            // Visual Game Type Checkboxes
+            const gameTypes = Array.from(document.querySelectorAll('input[name="gametype"]:checked')).map(cb => cb.value);
+            const visualStyleText = gameTypes.length > 0 ? gameTypes.join(", ") : "Flat Design (Default)";
+
+            // Radio Buttons
+            const interactionMode = document.querySelector('input[name="interaction"]:checked').value;
+            let interactionDesc = "";
+            let buttonPreviewText = "";
+
+            if (interactionMode === "abcd") {
+                interactionDesc = "Pilihan Ganda (Tombol A, B, C, D) di bagian bawah.";
+                buttonPreviewText = "[ A ] [ B ] [ C ] [ D ]";
+            } else if (interactionMode === "abc") {
+                interactionDesc = "Pilihan Ganda (Tombol A, B, C) di bagian bawah.";
+                buttonPreviewText = "[ A ] [ B ] [ C ]";
+            } else if (interactionMode === "calc") {
+                interactionDesc = "Keypad Kalkulator Angka di bagian bawah.";
+                buttonPreviewText = "[ 7 8 9 ] [ 4 5 6 ] [ 1 2 3 ]";
+            }
+
+            const subjectIcon = getSubjectIcon(subject);
+
+            // Construct JSON Object
+            const gameSpec = {
+                "role": "Senior Front-End Developer",
+                "task": "Create Single File HTML5 Educational Game for Interactive Flat Panel",
+                "outputFormat": "Single HTML file containing HTML, CSS (Tailwind), and JS",
+                "context": {
+                    "appName": appName,
+                    "targetAudience": `Siswa Kelas ${grade} SD`,
+                    "subject": `${subject} ${subjectIcon}`,
+                    "topic": material,
+                    "difficulty": difficultyText,
+                    "assets": {
+                        "logoUrl": customLogo,
+                        "footerText": footer
+                    }
+                },
+                "designSystem": {
+                    "framework": "Tailwind CSS via CDN",
+                    "font": "Google Font 'Poppins'",
+                    "visualStyle": visualStyleText,
+                    "layout": "Landscape Fullscreen (100vw x 100vh), overflow-hidden",
+                    "structure": "Split Screen (Horizontal 50:50) - Left Panel (Player A) & Right Panel (Player B). Display: flex; flex-direction: row;",
+                    "style": "Modern, Clean, Child-friendly, Floating Background Shapes Animation"
+                },
+                "gameplayLogic": {
+                    "questionCount": parseInt(count),
+                    "randomization": "Each panel displays different random questions independently. No duplicates active simultaneously.",
+                    "interactionMode": interactionDesc,
+                    "useImagesInQuestions": useImages,
+                    "scoring": "Dual Progress Bars (Independent for A and B)",
+                    "winCondition": "First to 100% triggers Fullscreen Confetti overlay"
+                },
+                "uiComponents": {
+                    "panelStructure": {
+                        "top": "Question Area (Text + Optional Image)",
+                        "bottom": "Interaction Area (Buttons)"
+                    },
+                    "header": "Display App Name and Logo",
+                    "progressBars": "Two separate bars inside respective player panels"
+                },
+                "technicalRequirements": [
+                    "Must be a valid single HTML file.",
+                    "Ensure responsive design for large touch screens.",
+                    "Use placeholder images if image mode is enabled (e.g., placehold.co).",
+                    "Do not use external CSS/JS files (use CDN or inline)."
+                ]
+            };
+
+            // Update Visuals
+            document.getElementById('narration-text').innerText = JSON.stringify(gameSpec, null, 2);
+            document.getElementById('visual-app-name').innerText = appName.toUpperCase();
+            document.getElementById('visual-grade').innerText = `KELAS ${grade}`;
+            document.getElementById('visual-footer').innerText = footer;
+            document.getElementById('visual-icon').innerText = subjectIcon;
+            document.getElementById('visual-footer-logo').src = customLogo;
+
+            // PREVIEW CONTENT UPDATE FOR IMAGES
+            const imgIcon = useImages ? '<div class="mb-2 text-4xl text-blue-300 opacity-50"><i class="fa-regular fa-image"></i></div>' : '';
+
+            document.getElementById('preview-content-a').innerHTML = `${imgIcon}[Pertanyaan Acak Tentang ${material}]`;
+            document.getElementById('preview-content-b').innerHTML = `${imgIcon}[Pertanyaan Acak Tentang ${material}]`;
+            document.getElementById('preview-buttons-a').innerText = buttonPreviewText;
+            document.getElementById('preview-buttons-b').innerText = buttonPreviewText;
+            
+            // Reset & Switch View
+            document.getElementById('visual-bar-a').style.width = "0%";
+            document.getElementById('visual-bar-b').style.width = "0%";
+            document.getElementById('score-text-a').innerText = "0%";
+            document.getElementById('score-text-b').innerText = "0%";
+            
+            document.getElementById('generator-section').classList.add('hidden');
+            document.getElementById('narration-section').classList.remove('hidden');
+            
+            // Preview Animation
+            setTimeout(() => {
+                document.getElementById('visual-bar-a').style.width = "40%";
+                document.getElementById('score-text-a').innerText = "40%";
+            }, 500);
+            
+            setTimeout(() => {
+                document.getElementById('visual-bar-b').style.width = "70%";
+                document.getElementById('score-text-b').innerText = "70%";
+            }, 800);
+        }
+
+        function backToGenerator() {
+            document.getElementById('narration-section').classList.add('hidden');
+            document.getElementById('generator-section').classList.remove('hidden');
+        }
+
+        function triggerWin() {
+            document.getElementById('visual-bar-a').style.width = "100%";
+            document.getElementById('visual-bar-b').style.width = "100%";
+            document.getElementById('score-text-a').innerText = "100%";
+            document.getElementById('score-text-b').innerText = "100%";
+            
+            // Efek Sprinkle
+            for(let i=0; i<100; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = Math.random() * 100 + "vw";
+                confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 50%)`;
+                confetti.style.animationDuration = (Math.random() * 2 + 1) + "s";
+                confetti.style.opacity = Math.random();
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 4000);
+            }
+
+            const winBanner = document.createElement('div');
+            winBanner.className = "fixed inset-0 flex items-center justify-center z-[5000]";
+            winBanner.innerHTML = `
+                <div class="bg-white p-8 rounded-3xl shadow-2xl border-4 border-yellow-400 text-center animate-bounce">
+                    <img src="${document.getElementById('visual-footer-logo').src}" class="h-16 mx-auto mb-4">
+                    <h2 class="text-3xl font-black text-gray-800">SIMULASI MENANG! 🏆</h2>
+                    <p class="text-blue-600 font-bold mt-2">K3S BEJI PASURUAN</p>
+                </div>
+            `;
+            document.body.appendChild(winBanner);
+            setTimeout(() => winBanner.remove(), 3500);
+        }
+    </script>
+</body>
+</html>
