@@ -12,66 +12,37 @@
         
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            color: #1e293b;
+            background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+            color: #334e68;
             position: relative;
             min-height: 100vh;
         }
 
-        /* --- DYNAMIC BACKGROUND SHAPES (UPDATED) --- */
+        /* --- DYNAMIC BACKGROUND SHAPES --- */
         .background-shapes {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1; /* Di belakang konten */
+            z-index: -1;
             overflow: hidden;
-            pointer-events: none; /* Tidak mengganggu klik */
+            pointer-events: none;
         }
 
         .shape {
             position: absolute;
-            opacity: 0.15; /* Sedikit lebih terlihat */
-            filter: blur(1px);
+            opacity: 0.1;
+            filter: blur(2px);
         }
 
-        /* Tipe Shape */
-        .shape-circle {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: #3b82f6; /* Blue */
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-        }
+        /* Shapes Definitions */
+        .shape-circle { width: 80px; height: 80px; border-radius: 50%; background: #3b82f6; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); }
+        .shape-square { width: 60px; height: 60px; background: #8b5cf6; border-radius: 16px; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3); }
+        .shape-triangle { width: 0; height: 0; border-left: 40px solid transparent; border-right: 40px solid transparent; border-bottom: 70px solid #10b981; filter: drop-shadow(0 4px 6px rgba(16, 185, 129, 0.3)); }
+        .shape-x { font-size: 60px; font-weight: 900; color: #f59e0b; text-shadow: 0 4px 10px rgba(245, 158, 11, 0.3); line-height: 1; font-family: sans-serif; }
 
-        .shape-square {
-            width: 60px;
-            height: 60px;
-            background: #8b5cf6; /* Purple */
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
-        }
-
-        .shape-triangle {
-            width: 0;
-            height: 0;
-            border-left: 40px solid transparent;
-            border-right: 40px solid transparent;
-            border-bottom: 70px solid #10b981; /* Green */
-            filter: drop-shadow(0 4px 6px rgba(16, 185, 129, 0.3));
-        }
-
-        .shape-x {
-            font-size: 60px;
-            font-weight: 900;
-            color: #f59e0b; /* Amber */
-            text-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);
-            line-height: 1;
-            font-family: sans-serif;
-        }
-
-        /* PERBAIKAN ANIMASI: Gerak Acak */
+        /* Animations */
         .s1 { top: 15%; left: 5%; animation: float-up 18s ease-in-out infinite; }
         .s2 { top: 20%; left: 85%; animation: float-down 23s ease-in-out infinite; }
         .s3 { top: 85%; left: 10%; animation: float-up 25s ease-in-out infinite; }
@@ -83,148 +54,107 @@
         .s9 { top: 5%; left: 60%; animation: float-up 21s ease-in-out infinite; }
         .s10 { top: 80%; left: 90%; animation: float-down 22s ease-in-out infinite; }
 
-        @keyframes float-up {
-            0% { transform: translateY(0) rotate(0deg) scale(1); }
-            50% { transform: translateY(-120px) rotate(180deg) scale(1.1); }
-            100% { transform: translateY(0) rotate(360deg) scale(1); }
-        }
+        @keyframes float-up { 0% { transform: translateY(0) rotate(0deg) scale(1); } 50% { transform: translateY(-120px) rotate(180deg) scale(1.1); } 100% { transform: translateY(0) rotate(360deg) scale(1); } }
+        @keyframes float-down { 0% { transform: translateY(0) rotate(0deg) scale(1); } 50% { transform: translateY(120px) rotate(-180deg) scale(0.9); } 100% { transform: translateY(0) rotate(-360deg) scale(1); } }
 
-        @keyframes float-down {
-            0% { transform: translateY(0) rotate(0deg) scale(1); }
-            50% { transform: translateY(120px) rotate(-180deg) scale(0.9); }
-            100% { transform: translateY(0) rotate(-360deg) scale(1); }
-        }
-
-        /* --- EXISTING STYLES --- */
-        .landscape-container {
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .narration-box {
+        /* --- UI UTILS --- */
+        .glass-panel {
             background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-left: 5px solid #3b82f6;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 0 15px 15px 0;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            position: relative;
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
         }
 
-        .panel-soal {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(5px);
-            border-radius: 12px;
-            padding: 10px;
-            border: 1px solid #e2e8f0;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+        .input-group-icon {
+            @apply absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400;
+        }
+        
+        .form-input {
+            @apply w-full pl-10 pr-3 py-3 border-2 border-gray-100 rounded-xl bg-gray-50/50 text-sm focus:ring-0 focus:border-blue-400 focus:bg-white transition-all duration-200 outline-none;
         }
 
+        .option-card {
+            @apply relative flex flex-col items-center justify-center p-3 border-2 border-gray-100 rounded-xl bg-white cursor-pointer transition-all hover:border-blue-200 hover:shadow-md;
+        }
+        .option-card:hover {
+            border-color: #bfdbfe;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .option-card:has(input:checked) {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+            box-shadow: 0 0 0 1px #3b82f6;
+        }
+        .option-card input:checked ~ i { color: #3b82f6; }
+        .option-card input:checked ~ div { color: #2563eb; font-weight: 700; }
+
+        /* --- LAYOUTS --- */
+        .landscape-container { width: 100vw; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        .split-screen { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; flex-grow: 1; width: 100%; height: 100%; padding: 0 10px; }
+        .single-screen { display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; }
+        .single-screen .panel-soal { max-width: 600px; width: 100%; height: 95%; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15); }
+
+        /* --- MODERN QUESTION BOX --- */
         .question-box {
-            background: #f0f9ff;
-            border: 1px solid #bae6fd;
-            border-radius: 8px;
-            padding: 10px;
+            background: #ffffff;
+            /* Border halus di sekeliling */
+            border: 1px solid #e2e8f0; 
+            /* Aksen border bawah tebal untuk efek 3D flat */
+            border-bottom: 4px solid #cbd5e1; 
+            border-radius: 16px;
+            padding: 30px 20px 20px 20px; /* Padding atas lebih besar untuk badge */
             width: 100%;
-            margin-bottom: 10px;
-            min-height: 50px;
+            margin-bottom: 20px;
+            min-height: 100px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             font-weight: 600;
-            color: #0369a1;
-            font-size: 0.85rem;
+            color: #334155;
+            font-size: 1rem;
             position: relative;
+            /* Shadow halus agar 'pop' dari background panel */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .question-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border-bottom-color: #94a3b8;
         }
 
         .question-badge {
             position: absolute;
-            top: -8px;
+            top: -12px;
             left: 50%;
             transform: translateX(-50%);
-            background: #0ea5e9;
+            background: linear-gradient(135deg, #3b82f6, #6366f1);
             color: white;
-            font-size: 8px;
-            padding: 2px 8px;
-            border-radius: 10px;
+            font-size: 10px;
+            padding: 4px 16px;
+            border-radius: 20px;
             text-transform: uppercase;
-            font-weight: bold;
+            font-weight: 800;
+            letter-spacing: 1px;
+            /* Shadow badge dan border putih agar terpisah visual */
+            box-shadow: 0 4px 6px rgba(99, 102, 241, 0.3);
+            border: 2px solid white;
+            z-index: 10;
         }
 
-        .panel-progress-container {
-            width: 100%;
-            margin-bottom: 10px;
-        }
-        
-        .panel-progress-track {
-            height: 10px;
-            background: #e2e8f0;
-            border-radius: 5px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .panel-progress-fill {
-            height: 100%;
-            width: 0%;
-            transition: width 1s ease-in-out;
-            position: relative;
-        }
-
+        .panel-progress-track { height: 12px; background: #e2e8f0; border-radius: 6px; overflow: hidden; position: relative; box-shadow: inset 0 1px 2px rgba(0,0,0,0.05); }
+        .panel-progress-fill { height: 100%; width: 0%; transition: width 1s ease-in-out; position: relative; }
         .fill-left { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
         .fill-right { background: linear-gradient(90deg, #6366f1, #818cf8); }
 
-        .confetti {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            top: -10px;
-            z-index: 9999;
-            animation: fall 3s linear forwards;
-        }
-
-        @keyframes fall {
-            to { transform: translateY(110vh) rotate(360deg); }
-        }
-
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(8px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 5000;
-        }
-        
-        .split-screen {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            flex-grow: 1;
-            width: 100%;
-            height: 100%;
-        }
-
         /* JSON Code Block Style */
-        pre {
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            font-size: 11px;
-            line-height: 1.4;
-        }
+        pre { white-space: pre-wrap; word-wrap: break-word; font-size: 11px; line-height: 1.4; }
+        
+        .confetti { position: fixed; width: 10px; height: 10px; top: -10px; z-index: 9999; animation: fall 3s linear forwards; }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 5000; }
     </style>
 </head>
 <body class="overflow-x-hidden">
@@ -245,300 +175,421 @@
 
     <!-- Section: Login -->
     <div id="login-section" class="flex items-center justify-center h-screen">
-        <div class="bg-white/90 backdrop-blur-lg p-8 rounded-2xl shadow-2xl w-96 transform transition-all hover:scale-105 border border-white/50">
-            <div class="text-center mb-6">
-                <!-- Custom Logo URL -->
-                <img src="https://i.imghippo.com/files/xYek7566NhY.png" alt="Logo K3S" class="h-24 mx-auto mb-4 drop-shadow-md">
-                <h1 class="text-2xl font-black text-gray-800 uppercase tracking-tight">Game Generator</h1>
-                <p class="text-blue-600 font-bold tracking-widest">BEJI PASURUAN</p>
+        <div class="glass-panel p-10 rounded-3xl shadow-2xl w-96 transform transition-all hover:scale-[1.02]">
+            <div class="text-center mb-8">
+                <!-- UPDATED LOGO: Bigger and Elegant -->
+                <div class="inline-block p-4 rounded-full bg-white border-2 border-blue-50 mb-6 shadow-md hover:shadow-lg transition-shadow duration-300">
+                    <img src="https://i.imghippo.com/files/xYek7566NhY.png" alt="Logo K3S" class="h-24 md:h-32 w-auto object-contain">
+                </div>
+                <h1 class="text-2xl font-black text-slate-800 tracking-tight">GAME GENERATOR</h1>
+                <div class="h-1 w-24 bg-gradient-to-r from-blue-400 to-indigo-500 mx-auto rounded-full mt-3 mb-3"></div>
+                <p class="text-indigo-600 font-bold tracking-[0.2em] text-sm">BEJI PASURUAN</p>
             </div>
-            <div class="space-y-4">
-                <input type="text" id="username" placeholder="Username" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-white/80">
-                <input type="password" id="password" placeholder="Password" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-white/80">
-                <button onclick="handleLogin()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg hover:shadow-blue-500/30">MASUK SISTEM</button>
+            
+            <div class="space-y-6">
+                <!-- UNIFIED INPUT GROUP (New Elegant Design) -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden group focus-within:ring-4 focus-within:ring-blue-100 focus-within:border-blue-400 transition-all duration-300">
+                    
+                    <!-- Username Field -->
+                    <div class="relative flex items-center border-b border-gray-100 p-1">
+                        <div class="w-12 h-12 flex items-center justify-center text-indigo-500 bg-indigo-50 rounded-xl m-1 shadow-sm">
+                            <i class="fa-regular fa-circle-user text-xl"></i>
+                        </div>
+                        <input type="text" id="username" placeholder="Username" class="w-full h-14 pl-3 pr-4 text-slate-700 font-medium placeholder-slate-400 outline-none bg-transparent">
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="relative flex items-center p-1">
+                        <div class="w-12 h-12 flex items-center justify-center text-pink-500 bg-pink-50 rounded-xl m-1 shadow-sm">
+                            <i class="fa-solid fa-fingerprint text-xl"></i>
+                        </div>
+                        <input type="password" id="password" placeholder="Password" class="w-full h-14 pl-3 pr-4 text-slate-700 font-medium placeholder-slate-400 outline-none bg-transparent">
+                    </div>
+
+                </div>
+
+                <button onclick="handleLogin()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3.5 rounded-xl font-bold hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg shadow-blue-200 transform active:scale-95 flex items-center justify-center gap-2">
+                    MASUK SISTEM <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                </button>
             </div>
-            <p id="login-error" class="text-red-500 text-xs mt-4 text-center hidden">Maaf, Username atau Password salah!</p>
+            
+            <p id="login-error" class="text-red-500 text-xs mt-4 text-center hidden font-medium bg-red-50 py-2 rounded-lg border border-red-100">
+                <i class="fa-solid fa-circle-exclamation mr-1"></i> Username atau Password salah!
+            </p>
         </div>
     </div>
 
     <!-- Section: Generator Form -->
-    <div id="generator-section" class="hidden min-h-screen p-8">
-        <div class="max-w-6xl mx-auto bg-white/95 backdrop-blur-sm rounded-3xl shadow-xl p-10 border border-white/60">
-            <div class="flex items-center gap-4 mb-8 border-b pb-6">
-                <img src="https://i.imghippo.com/files/xYek7566NhY.png" alt="Logo K3S" class="h-16">
-                <div>
-                    <h2 class="text-2xl font-black text-gray-800">GENERATOR JSON CONFIG</h2>
-                    <p class="text-gray-500 text-sm">BEJI PASURUAN - Media Interaktif Creator</p>
+    <div id="generator-section" class="hidden min-h-screen p-6 md:p-10">
+        <div class="max-w-6xl mx-auto glass-panel rounded-[2.5rem] shadow-2xl p-8 md:p-12">
+            
+            <!-- Form Header with Responsive Elegant Logo -->
+            <div class="flex flex-col md:flex-row items-center gap-8 mb-10 border-b border-gray-100 pb-8">
+                <div class="bg-white p-4 md:p-5 rounded-3xl border-2 border-blue-50 shadow-md transform hover:scale-105 transition duration-300">
+                    <img src="https://i.imghippo.com/files/xYek7566NhY.png" alt="Logo K3S" class="h-20 md:h-28 w-auto object-contain">
+                </div>
+                <div class="text-center md:text-left">
+                    <h2 class="text-3xl md:text-4xl font-black text-slate-800 mb-2">K3S BEJI GAME CREATOR 2025</h2>
+                    <div class="flex items-center gap-3 justify-center md:justify-start">
+                        <span class="bg-gradient-to-r from-green-400 to-emerald-500 text-white text-xs px-3 py-1 rounded-full font-bold shadow-sm">V 2.0</span>
+                        <p class="text-slate-500 font-medium text-sm md:text-base">Generator Media Pembelajaran Interaktif</p>
+                    </div>
                 </div>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Kolom Kiri -->
-                <div class="space-y-5">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <!-- Kolom Kiri: Identitas -->
+                <div class="space-y-6">
+                    <h3 class="text-lg font-bold text-indigo-900 flex items-center gap-2">
+                        <span class="bg-indigo-100 text-indigo-600 p-2 rounded-lg"><i class="fa-solid fa-fingerprint"></i></span> Identitas Aplikasi
+                    </h3>
+                    
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Nama Aplikasi</label>
-                        <input type="text" id="gen-app-name" placeholder="Masukkan nama game..." class="w-full border p-3 rounded-xl bg-gray-50 focus:ring-2 focus:ring-blue-200 outline-none">
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1 ml-1">Nama Aplikasi</label>
+                        <div class="relative">
+                            <div class="input-group-icon text-purple-400"><i class="fa-solid fa-gamepad"></i></div>
+                            <input type="text" id="gen-app-name" placeholder="Contoh: Petualangan Matematika" class="form-input focus:border-purple-400">
+                        </div>
                     </div>
                     
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">Mata Pelajaran</label>
-                            <select id="gen-subject" class="w-full border p-3 rounded-xl bg-gray-50">
-                                <option value="Pendidikan Agama">Pendidikan Agama</option>
-                                <option value="Pendidikan Pancasila (PPKn)">Pendidikan Pancasila (PPKn)</option>
-                                <option value="Bahasa Indonesia">Bahasa Indonesia</option>
-                                <option value="Matematika">Matematika</option>
-                                <option value="IPA">IPA</option>
-                                <option value="IPS">IPS</option>
-                                <option value="PJOK">PJOK</option>
-                                <option value="Seni Budaya">Seni Budaya</option>
-                                <option value="Bahasa Inggris">Bahasa Inggris</option>
-                            </select>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1 ml-1">Mata Pelajaran</label>
+                            <div class="relative">
+                                <div class="input-group-icon text-blue-400"><i class="fa-solid fa-book"></i></div>
+                                <select id="gen-subject" class="form-input focus:border-blue-400 appearance-none">
+                                    <option value="Pendidikan Agama">Pendidikan Agama</option>
+                                    <option value="Pendidikan Pancasila (PPKn)">PPKn</option>
+                                    <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+                                    <option value="Matematika">Matematika</option>
+                                    <option value="IPA">IPA</option>
+                                    <option value="IPS">IPS</option>
+                                    <option value="PJOK">PJOK</option>
+                                    <option value="Seni Budaya">Seni Budaya</option>
+                                    <option value="Bahasa Inggris">Bahasa Inggris</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-gray-400"><i class="fa-solid fa-chevron-down text-xs"></i></div>
+                            </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">Kelas</label>
-                            <select id="gen-grade" class="w-full border p-3 rounded-xl bg-gray-50">
-                                <option value="1">Kelas 1</option>
-                                <option value="2">Kelas 2</option>
-                                <option value="3">Kelas 3</option>
-                                <option value="4">Kelas 4</option>
-                                <option value="5">Kelas 5</option>
-                                <option value="6">Kelas 6</option>
-                            </select>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1 ml-1">Kelas</label>
+                            <div class="relative">
+                                <div class="input-group-icon text-green-400"><i class="fa-solid fa-graduation-cap"></i></div>
+                                <select id="gen-grade" class="form-input focus:border-green-400 appearance-none">
+                                    <option value="1">Kelas 1</option>
+                                    <option value="2">Kelas 2</option>
+                                    <option value="3">Kelas 3</option>
+                                    <option value="4">Kelas 4</option>
+                                    <option value="5">Kelas 5</option>
+                                    <option value="6">Kelas 6</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-gray-400"><i class="fa-solid fa-chevron-down text-xs"></i></div>
+                            </div>
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Tujuan Pelajaran</label>
-                        <textarea id="gen-objective" class="w-full border p-3 rounded-xl bg-gray-50 h-24" placeholder="Apa tujuan dari permainan ini?"></textarea>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1 ml-1">Tujuan Pembelajaran</label>
+                        <div class="relative">
+                            <div class="absolute top-3 left-3 text-red-400"><i class="fa-solid fa-bullseye"></i></div>
+                            <textarea id="gen-objective" class="form-input pl-10 h-24 focus:border-red-400" placeholder="Jelaskan tujuan pembelajaran..."></textarea>
+                        </div>
                     </div>
 
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Link Logo Kustom (Opsional)</label>
-                        <input type="text" id="gen-logo" placeholder="https://..." class="w-full border p-3 rounded-xl bg-gray-50 text-sm">
-                        <p class="text-[10px] text-gray-400 mt-1">*Biarkan kosong untuk menggunakan logo default K3S Beji Pasuruan.</p>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1 ml-1">Link Logo (Opsional)</label>
+                        <div class="relative">
+                            <div class="input-group-icon text-gray-400"><i class="fa-solid fa-link"></i></div>
+                            <input type="text" id="gen-logo" placeholder="https://..." class="form-input">
+                        </div>
+                        <p class="text-[10px] text-gray-400 mt-1 ml-1">*Default: Logo K3S Beji</p>
                     </div>
                 </div>
 
-                <!-- Kolom Kanan -->
-                <div class="space-y-5">
-                    <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Materi Spesifik</label>
-                        <input type="text" id="gen-material" class="w-full border p-3 rounded-xl bg-gray-50" placeholder="Contoh: Perkalian Bilangan Cacah">
-                    </div>
+                <!-- Kolom Kanan: Konten & Teknis -->
+                <div class="space-y-6">
+                    <h3 class="text-lg font-bold text-indigo-900 flex items-center gap-2">
+                        <span class="bg-indigo-100 text-indigo-600 p-2 rounded-lg"><i class="fa-solid fa-sliders"></i></span> Konfigurasi Teknis
+                    </h3>
 
-                    <!-- FITUR GAMBAR -->
-                    <div class="flex items-center gap-3 bg-indigo-50 p-3 rounded-xl border border-indigo-100 transition hover:shadow-sm">
-                        <div class="bg-white p-2 rounded-lg text-indigo-600 shadow-sm border border-indigo-50">
-                            <i class="fa-regular fa-image text-lg"></i>
-                        </div>
-                        <label class="flex-1 cursor-pointer select-none">
-                            <span class="block text-sm font-bold text-gray-700">Fitur Gambar Soal</span>
-                            <span class="block text-[10px] text-gray-500">Tampilkan ilustrasi gambar pada setiap pertanyaan</span>
-                        </label>
-                        <input type="checkbox" id="gen-images" class="w-6 h-6 text-indigo-600 rounded focus:ring-indigo-500 border-gray-300">
-                    </div>
-
-                    <!-- JENIS VISUAL GAME (NEW) -->
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Jenis Visual Game</label>
-                        <div class="flex flex-wrap gap-4 p-3 bg-gray-50 rounded-xl border border-gray-200">
-                            <label class="flex items-center gap-2 cursor-pointer text-sm">
-                                <input type="checkbox" name="gametype" value="Flat" class="w-4 h-4 text-blue-600 rounded" checked> Flat
-                            </label>
-                            <label class="flex items-center gap-2 cursor-pointer text-sm">
-                                <input type="checkbox" name="gametype" value="2D" class="w-4 h-4 text-blue-600 rounded"> 2D
-                            </label>
-                            <label class="flex items-center gap-2 cursor-pointer text-sm">
-                                <input type="checkbox" name="gametype" value="3D" class="w-4 h-4 text-blue-600 rounded"> 3D
-                            </label>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1 ml-1">Materi Spesifik</label>
+                        <div class="relative">
+                            <div class="input-group-icon text-orange-400"><i class="fa-solid fa-layer-group"></i></div>
+                            <input type="text" id="gen-material" class="form-input focus:border-orange-400" placeholder="Topik materi utama...">
                         </div>
                     </div>
 
+                    <!-- Pilihan Device & Orientasi -->
                     <div class="grid grid-cols-2 gap-4">
-                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">Tingkat Kesulitan</label>
-                            <div class="flex flex-col gap-2 p-3 bg-gray-50 rounded-xl h-full border border-gray-200">
-                                <label class="flex items-center gap-2 cursor-pointer text-sm"><input type="checkbox" name="diff" value="LOTS" class="w-4 h-4 text-blue-600"> LOTS</label>
-                                <label class="flex items-center gap-2 cursor-pointer text-sm"><input type="checkbox" name="diff" value="MOTS" class="w-4 h-4 text-blue-600"> MOTS</label>
-                                <label class="flex items-center gap-2 cursor-pointer text-sm"><input type="checkbox" name="diff" value="HOTS" class="w-4 h-4 text-blue-600"> HOTS</label>
-                                <label class="flex items-center gap-2 cursor-pointer text-sm"><input type="checkbox" name="diff" value="LITERASI" class="w-4 h-4 text-blue-600"> LITERASI</label>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Mode Perangkat</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <label class="option-card">
+                                    <input type="radio" name="devicemode" value="IFP" class="hidden" checked>
+                                    <i class="fa-solid fa-desktop text-2xl mb-1 text-gray-300"></i>
+                                    <div class="text-[10px] text-gray-500">IFP (Split)</div>
+                                </label>
+                                <label class="option-card">
+                                    <input type="radio" name="devicemode" value="Mobile" class="hidden">
+                                    <i class="fa-solid fa-mobile-screen text-2xl mb-1 text-gray-300"></i>
+                                    <div class="text-[10px] text-gray-500">Seluler</div>
+                                </label>
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">Mode Interaksi</label>
-                             <div class="flex flex-col gap-2 p-3 bg-gray-50 rounded-xl h-full border border-gray-200">
-                                <label class="flex items-center gap-2 cursor-pointer text-sm font-medium">
-                                    <input type="radio" name="interaction" value="abcd" class="w-4 h-4 text-blue-600" checked> 
-                                    Pilihan Ganda (A-D)
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Orientasi</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <label class="option-card">
+                                    <input type="radio" name="orientation" value="Landscape" class="hidden" checked>
+                                    <i class="fa-regular fa-image text-2xl mb-1 text-gray-300"></i>
+                                    <div class="text-[10px] text-gray-500">Landscape</div>
                                 </label>
-                                <label class="flex items-center gap-2 cursor-pointer text-sm font-medium">
-                                    <input type="radio" name="interaction" value="abc" class="w-4 h-4 text-blue-600"> 
-                                    Pilihan Ganda (A-C)
-                                </label>
-                                <label class="flex items-center gap-2 cursor-pointer text-sm font-medium">
-                                    <input type="radio" name="interaction" value="calc" class="w-4 h-4 text-blue-600"> 
-                                    Kalkulator Interaktif
+                                <label class="option-card">
+                                    <input type="radio" name="orientation" value="Portrait" class="hidden">
+                                    <i class="fa-solid fa-mobile text-2xl mb-1 text-gray-300"></i>
+                                    <div class="text-[10px] text-gray-500">Portrait</div>
                                 </label>
                             </div>
                         </div>
                     </div>
-                   
+
+                    <!-- Visual & Interaction -->
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">Jumlah Soal</label>
-                            <input type="number" id="gen-count" value="10" class="w-full border p-3 rounded-xl bg-gray-50">
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Gaya Visual</label>
+                            <div class="flex flex-col gap-2">
+                                <label class="flex items-center gap-2 p-2 border rounded-lg bg-white cursor-pointer hover:bg-gray-50">
+                                    <input type="checkbox" name="gametype" value="Flat" class="text-blue-600 rounded" checked>
+                                    <i class="fa-solid fa-square text-teal-400"></i>
+                                    <span class="text-xs font-medium">Flat Design</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-2 border rounded-lg bg-white cursor-pointer hover:bg-gray-50">
+                                    <input type="checkbox" name="gametype" value="2D" class="text-blue-600 rounded">
+                                    <i class="fa-solid fa-shapes text-pink-400"></i>
+                                    <span class="text-xs font-medium">2D Cartoon</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-2 border rounded-lg bg-white cursor-pointer hover:bg-gray-50">
+                                    <input type="checkbox" name="gametype" value="3D" class="text-blue-600 rounded">
+                                    <i class="fa-solid fa-cube text-purple-400"></i>
+                                    <span class="text-xs font-medium">3D Assets</span>
+                                </label>
+                            </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">Footer</label>
-                            <input type="text" id="gen-footer" value="K3S BEJI PASURUAN © 2026" class="w-full border p-3 rounded-xl bg-gray-50">
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">Mode Interaksi</label>
+                            <div class="flex flex-col gap-2">
+                                <label class="flex items-center gap-2 p-2 border rounded-lg bg-white cursor-pointer hover:bg-gray-50">
+                                    <input type="radio" name="interaction" value="abcd" class="text-blue-600" checked>
+                                    <i class="fa-solid fa-list-ol text-blue-400"></i>
+                                    <span class="text-xs font-medium">Pilihan A-D</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-2 border rounded-lg bg-white cursor-pointer hover:bg-gray-50">
+                                    <input type="radio" name="interaction" value="abc" class="text-blue-600">
+                                    <i class="fa-solid fa-list-ul text-green-400"></i>
+                                    <span class="text-xs font-medium">Pilihan A-C</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-2 border rounded-lg bg-white cursor-pointer hover:bg-gray-50">
+                                    <input type="radio" name="interaction" value="calc" class="text-blue-600">
+                                    <i class="fa-solid fa-calculator text-orange-400"></i>
+                                    <span class="text-xs font-medium">Kalkulator</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fitur Gambar -->
+                    <div class="p-3 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl border border-blue-100 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-white p-2 rounded-lg text-blue-500 shadow-sm"><i class="fa-regular fa-image"></i></div>
+                            <div>
+                                <div class="text-sm font-bold text-slate-700">Fitur Gambar Soal</div>
+                                <div class="text-[10px] text-slate-500">Tampilkan ilustrasi di setiap soal</div>
+                            </div>
+                        </div>
+                        <input type="checkbox" id="gen-images" class="w-5 h-5 text-blue-600 rounded cursor-pointer">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1 ml-1">Jumlah Soal</label>
+                            <div class="relative">
+                                <div class="input-group-icon text-gray-400"><i class="fa-solid fa-arrow-up-9-1"></i></div>
+                                <input type="number" id="gen-count" value="10" class="form-input">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1 ml-1">Footer</label>
+                            <div class="relative">
+                                <div class="input-group-icon text-gray-400"><i class="fa-regular fa-copyright"></i></div>
+                                <input type="text" id="gen-footer" value="K3S BEJI 2026" class="form-input">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="mt-10">
-                <button onclick="generateNarration()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 rounded-2xl font-black text-xl hover:from-blue-700 hover:to-indigo-700 shadow-xl transition-all flex items-center justify-center gap-3 transform hover:scale-[1.01]">
-                    <span>✨ GENERATE JSON SPEC</span>
+            <!-- Submit Button -->
+            <div class="mt-12 pt-6 border-t border-gray-100">
+                <button onclick="generateNarration()" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-4 rounded-2xl font-black text-xl hover:from-green-600 hover:to-emerald-700 shadow-xl shadow-green-200 transition-all flex items-center justify-center gap-3 transform hover:scale-[1.01] group">
+                    <span class="group-hover:animate-pulse">✨</span> 
+                    GENERATE JSON PROMPT 
+                    <i class="fa-solid fa-wand-magic-sparkles ml-2 group-hover:rotate-12 transition"></i>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Section: Output Narasi & Visualisasi (Landscape Mode) -->
+    <!-- Section: Output Narasi & Visualisasi -->
     <div id="narration-section" class="hidden landscape-container">
-        <!-- Header Output -->
-        <div class="bg-white/95 backdrop-blur-md border-b p-4 flex justify-between items-center shadow-sm h-16">
+        <!-- Header Output with Elegant Logo -->
+        <div class="bg-white/95 backdrop-blur-md border-b p-4 flex justify-between items-center shadow-sm h-16 z-20">
             <div class="flex items-center gap-3">
-                <img src="https://i.imghippo.com/files/xYek7566NhY.png" class="h-8">
-                <h2 class="text-xl font-black text-slate-800">HASIL OUTPUT (JSON)</h2>
+                <div class="bg-white p-1.5 rounded-xl border border-blue-50 shadow-sm">
+                    <img src="https://i.imghippo.com/files/xYek7566NhY.png" class="h-10 md:h-12 w-auto object-contain">
+                </div>
+                <div>
+                    <h2 class="text-xl font-black text-slate-800 tracking-tight leading-none">HASIL <span class="text-blue-600">JSON</span></h2>
+                    <p class="text-[10px] text-gray-400 font-bold tracking-widest">K3S CREATOR</p>
+                </div>
             </div>
             <div class="flex gap-2">
-                <button onclick="showInstructions()" class="bg-yellow-100 text-yellow-700 border border-yellow-300 px-4 py-2 rounded-lg font-bold text-sm flex items-center gap-2 hover:bg-yellow-200">
+                <button onclick="showInstructions()" class="bg-yellow-100 text-yellow-700 border border-yellow-300 px-4 py-2 rounded-xl font-bold text-sm flex items-center gap-2 hover:bg-yellow-200 transition">
                     <i class="fa-solid fa-book-open"></i> Panduan
                 </button>
-                <button onclick="backToGenerator()" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-bold text-sm hover:bg-gray-300">Kembali</button>
-                <button onclick="triggerWin()" class="bg-green-600 text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-green-700">Simulasi</button>
+                <button onclick="backToGenerator()" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-xl font-bold text-sm hover:bg-gray-200 transition">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Kembali
+                </button>
+                <button onclick="triggerWin()" class="bg-green-100 text-green-700 border border-green-200 px-4 py-2 rounded-xl font-bold text-sm hover:bg-green-200 transition">
+                    <i class="fa-solid fa-play mr-1"></i> Simulasi
+                </button>
             </div>
         </div>
 
         <div class="flex flex-1 overflow-hidden p-4 gap-6 relative z-10">
-            <!-- Left: Narration Content with Copy Button -->
+            <!-- Left: JSON Content -->
             <div class="w-1/3 flex flex-col h-full relative">
-                <div class="narration-box flex-1 overflow-y-auto mb-0 pr-2">
-                    <div class="flex justify-between items-center mb-2 sticky top-0 bg-white/95 backdrop-blur z-10 py-2 border-b">
-                        <h3 class="font-bold text-blue-700 text-lg">📄 JSON Prompt</h3>
-                        <button onclick="copyToClipboard()" id="btn-copy" class="bg-blue-600 text-white px-3 py-1 rounded-md text-xs font-bold flex items-center gap-2 hover:bg-blue-700 transition-all shadow-md">
-                            <i class="fa-regular fa-copy"></i> <span id="btn-copy-text">Salin JSON</span>
+                <div class="narration-box flex-1 overflow-y-auto mb-0 pr-2 flex flex-col rounded-2xl border-0 shadow-lg">
+                    <div class="flex justify-between items-center p-3 bg-slate-800 text-white rounded-t-2xl sticky top-0 z-10">
+                        <h3 class="font-bold text-sm flex items-center gap-2"><i class="fa-solid fa-code"></i> JSON Prompt</h3>
+                        <button onclick="copyToClipboard()" id="btn-copy" class="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-blue-500 transition-all">
+                            <i class="fa-regular fa-copy"></i> <span id="btn-copy-text">Salin</span>
                         </button>
                     </div>
                     
-                    <div class="p-2 bg-blue-50 rounded border border-blue-200 text-xs text-blue-700 mb-2">
-                        Tekan tombol "Salin JSON" di atas, lalu tempel (Paste) ke AI (Gemini/ChatGPT/Canva).
-                    </div>
-                    
-                    <div class="bg-slate-900 p-3 rounded border border-gray-600 overflow-x-auto">
-                        <pre id="narration-text" class="text-xs leading-relaxed text-green-400 font-mono select-all">
+                    <div class="bg-slate-900 p-4 overflow-x-auto flex-1 rounded-b-2xl border-x border-b border-slate-700">
+                        <pre id="narration-text" class="text-xs leading-relaxed text-emerald-400 font-mono select-all">
                             <!-- Konten JSON Akan Muncul Di Sini -->
                         </pre>
+                    </div>
+                    
+                    <div class="mt-2 p-3 bg-blue-50 rounded-xl border border-blue-200 text-xs text-blue-700 flex items-start gap-2">
+                        <i class="fa-solid fa-circle-info mt-0.5"></i>
+                        <span>Salin kode JSON di atas, lalu tempel (Paste) ke <b>Gemini</b>, <b>ChatGPT</b>, atau <b>Claude</b> untuk membuat game.</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Right: Bar Visualisasi & Layout Preview -->
+            <!-- Right: Preview -->
             <div class="w-2/3 flex flex-col gap-4">
-                <div class="bg-white/95 backdrop-blur-md p-4 rounded-2xl shadow-sm border flex flex-col flex-1 relative">
-                    <div class="absolute top-2 right-2 bg-blue-100 text-blue-800 text-[10px] font-bold px-2 py-1 rounded">PREVIEW TATA LETAK</div>
+                <div class="bg-white/90 backdrop-blur-md p-5 rounded-3xl shadow-xl border border-white/50 flex flex-col flex-1 relative overflow-hidden">
+                    <div class="absolute top-3 right-3 bg-slate-100 text-slate-500 text-[10px] font-bold px-3 py-1 rounded-full border border-slate-200 uppercase tracking-wide">PREVIEW LAYOUT</div>
                     
-                    <div class="flex justify-between items-end mb-4">
-                        <div class="flex items-center gap-3">
+                    <div class="flex justify-between items-end mb-6 border-b border-gray-100 pb-4">
+                        <div class="flex items-center gap-4">
                             <!-- ICON CONTAINER -->
-                            <div id="visual-icon" class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-3xl shadow-sm border border-blue-100">
+                            <div id="visual-icon" class="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center text-3xl shadow-lg shadow-blue-200 text-white">
                                 🎮
                             </div>
                             <div>
-                                <span class="text-[10px] font-bold text-gray-400 uppercase">Judul Aplikasi</span>
-                                <div class="text-xl font-black text-blue-600 leading-none" id="visual-app-name">NAMA GAME</div>
+                                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Judul Aplikasi</span>
+                                <div class="text-2xl font-black text-slate-800 leading-none" id="visual-app-name">NAMA GAME</div>
                             </div>
                         </div>
                         <div class="text-right">
-                            <span class="text-[10px] font-bold text-gray-400 uppercase">Kelas</span>
-                            <div class="text-sm font-bold text-gray-600" id="visual-grade">Kelas X</div>
+                            <span class="text-[10px] font-bold text-blue-500 bg-blue-50 px-2 py-1 rounded uppercase" id="visual-device-mode">IFP MODE</span>
+                            <div class="text-lg font-bold text-gray-600" id="visual-grade">Kelas X</div>
                         </div>
                     </div>
 
-                    <!-- Split Screen Preview with Individual Progress Bars -->
-                    <div class="split-screen mt-2">
-                        <!-- Panel Kiri -->
-                        <div class="panel-soal border-blue-200 bg-blue-50/20">
-                            <div class="w-full">
-                                <span class="bg-blue-600 text-white text-[9px] px-2 py-0.5 rounded-full mb-2 inline-block">PLAYER A (KIRI)</span>
-                                
-                                <!-- Progress Bar A (Kiri) -->
-                                <div class="panel-progress-container px-4">
-                                    <div class="flex justify-between text-[9px] text-blue-600 font-bold mb-1">
-                                        <span>PROGRES TIM A</span>
-                                        <span id="score-text-a">0%</span>
+                    <!-- Dynamic Layout Container -->
+                    <div id="layout-preview-container" class="split-screen mt-2">
+                        <!-- Panel Kiri / Single Main Panel -->
+                        <div id="panel-a" class="panel-soal bg-white border-2 border-blue-100 shadow-sm relative overflow-hidden group">
+                            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-blue-600"></div>
+                            <div class="w-full h-full flex flex-col justify-between p-2">
+                                <div>
+                                    <span id="label-player-a" class="bg-blue-100 text-blue-700 text-[10px] font-bold px-3 py-1 rounded-full mb-3 inline-block">PLAYER A</span>
+                                    
+                                    <!-- Progress Bar A -->
+                                    <div class="panel-progress-container px-2 mb-4">
+                                        <div class="flex justify-between text-[9px] text-slate-500 font-bold mb-1">
+                                            <span id="label-progres-a">PROGRES</span>
+                                            <span id="score-text-a">0%</span>
+                                        </div>
+                                        <div class="panel-progress-track">
+                                            <div id="visual-bar-a" class="panel-progress-fill fill-left"></div>
+                                        </div>
                                     </div>
-                                    <div class="panel-progress-track">
-                                        <div id="visual-bar-a" class="panel-progress-fill fill-left"></div>
-                                    </div>
-                                </div>
 
-                                <!-- Area Soal Di Atas -->
-                                <div class="question-box">
-                                    <div class="question-badge">SOAL ACAK A</div>
-                                    <span id="preview-content-a" class="text-center px-2">Pertanyaan Acak A Muncul Disini</span>
+                                    <!-- Area Soal -->
+                                    <div class="question-box">
+                                        <div class="question-badge">SOAL #1</div>
+                                        <span id="preview-content-a" class="text-center px-4">Pertanyaan Acak Muncul Disini</span>
+                                    </div>
                                 </div>
-                            </div>
-                            
-                            <!-- Tombol Interaksi Di Bawah -->
-                            <div class="w-full mt-2">
-                                <div class="p-2 border-2 border-dashed border-blue-300 rounded bg-white w-full">
-                                    <div class="text-[10px] text-center text-blue-400 font-mono font-bold" id="preview-buttons-a">
-                                        [TOMBOL]
+                                
+                                <!-- Tombol -->
+                                <div class="w-full mt-2">
+                                    <div class="p-3 border-2 border-dashed border-blue-200 rounded-xl bg-blue-50/50 w-full flex items-center justify-center">
+                                        <div class="text-[10px] text-center text-blue-400 font-mono font-bold" id="preview-buttons-a">
+                                            [AREA INTERAKSI]
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Panel Kanan -->
-                        <div class="panel-soal border-indigo-200 bg-indigo-50/20">
-                            <div class="w-full">
-                                <span class="bg-indigo-600 text-white text-[9px] px-2 py-0.5 rounded-full mb-2 inline-block">PLAYER B (KANAN)</span>
+                        <div id="panel-b" class="panel-soal bg-white border-2 border-indigo-100 shadow-sm relative overflow-hidden group">
+                            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-400 to-indigo-600"></div>
+                            <div class="w-full h-full flex flex-col justify-between p-2">
+                                <div>
+                                    <span class="bg-indigo-100 text-indigo-700 text-[10px] font-bold px-3 py-1 rounded-full mb-3 inline-block">PLAYER B</span>
 
-                                <!-- Progress Bar B (Kanan) -->
-                                <div class="panel-progress-container px-4">
-                                    <div class="flex justify-between text-[9px] text-indigo-600 font-bold mb-1">
-                                        <span>PROGRES TIM B</span>
-                                        <span id="score-text-b">0%</span>
+                                    <!-- Progress Bar B -->
+                                    <div class="panel-progress-container px-2 mb-4">
+                                        <div class="flex justify-between text-[9px] text-slate-500 font-bold mb-1">
+                                            <span>PROGRES</span>
+                                            <span id="score-text-b">0%</span>
+                                        </div>
+                                        <div class="panel-progress-track">
+                                            <div id="visual-bar-b" class="panel-progress-fill fill-right"></div>
+                                        </div>
                                     </div>
-                                    <div class="panel-progress-track">
-                                        <div id="visual-bar-b" class="panel-progress-fill fill-right"></div>
+
+                                    <!-- Area Soal -->
+                                    <div class="question-box" style="background: #eef2ff; border-color: #c7d2fe; color: #4338ca;">
+                                        <div class="question-badge" style="background: #6366f1;">SOAL #1</div>
+                                        <span id="preview-content-b" class="text-center px-4">Pertanyaan Acak B Muncul Disini</span>
                                     </div>
                                 </div>
 
-                                <!-- Area Soal Di Atas -->
-                                <div class="question-box" style="background: #eef2ff; border-color: #c7d2fe; color: #4338ca;">
-                                    <div class="question-badge" style="background: #6366f1;">SOAL ACAK B</div>
-                                    <span id="preview-content-b" class="text-center px-2">Pertanyaan Acak B Muncul Disini</span>
-                                </div>
-                            </div>
-
-                            <!-- Tombol Interaksi Di Bawah -->
-                            <div class="w-full mt-2">
-                                <div class="p-2 border-2 border-dashed border-indigo-300 rounded bg-white w-full">
-                                    <div class="text-[10px] text-center text-indigo-400 font-mono font-bold" id="preview-buttons-b">
-                                        [TOMBOL]
+                                <!-- Tombol -->
+                                <div class="w-full mt-2">
+                                    <div class="p-3 border-2 border-dashed border-indigo-200 rounded-xl bg-indigo-50/50 w-full flex items-center justify-center">
+                                        <div class="text-[10px] text-center text-indigo-400 font-mono font-bold" id="preview-buttons-b">
+                                            [AREA INTERAKSI]
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="mt-2 text-center flex items-center justify-center gap-2">
-                        <img id="visual-footer-logo" src="https://i.imghippo.com/files/xYek7566NhY.png" class="h-4">
-                        <p class="text-[10px] text-gray-400" id="visual-footer">FOOTER CONTENT</p>
+                    <div class="mt-4 text-center flex items-center justify-center gap-2 opacity-50">
+                        <img id="visual-footer-logo" src="https://i.imghippo.com/files/xYek7566NhY.png" class="h-3 grayscale">
+                        <p class="text-[9px] text-gray-400 font-bold tracking-widest" id="visual-footer">FOOTER CONTENT</p>
                     </div>
                 </div>
             </div>
@@ -547,54 +598,50 @@
 
     <!-- Instruction Modal -->
     <div id="instruction-modal" class="hidden modal-overlay">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full mx-4 overflow-hidden border border-white/40">
-            <div class="bg-blue-600 p-4 text-white flex justify-between items-center">
-                <h3 class="font-bold text-lg">📚 Panduan Pembuatan Aplikasi</h3>
-                <button onclick="closeInstructions()" class="text-white hover:text-gray-200 font-bold text-xl">&times;</button>
+        <div class="bg-white rounded-3xl shadow-2xl max-w-3xl w-full mx-4 overflow-hidden border border-white/40">
+            <div class="bg-blue-600 p-5 text-white flex justify-between items-center">
+                <h3 class="font-bold text-lg flex items-center gap-2"><i class="fa-solid fa-book"></i> Panduan Pembuatan</h3>
+                <button onclick="closeInstructions()" class="text-white/80 hover:text-white transition text-xl">&times;</button>
             </div>
-            <div class="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
-                <div class="flex items-start gap-4">
-                    <div class="bg-blue-100 text-blue-700 font-bold w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">1</div>
+            <div class="p-8 space-y-6 max-h-[70vh] overflow-y-auto bg-gray-50">
+                <div class="flex items-start gap-5 p-4 bg-white rounded-xl shadow-sm border border-gray-100">
+                    <div class="bg-blue-100 text-blue-700 font-black w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-lg">1</div>
                     <div>
-                        <h4 class="font-bold text-gray-800">Generate JSON</h4>
-                        <p class="text-sm text-gray-600">Isi formulir lengkap lalu klik tombol <b>"Generate JSON Spec"</b>.</p>
+                        <h4 class="font-bold text-gray-800 text-lg">Generate JSON</h4>
+                        <p class="text-sm text-gray-600 mt-1">Lengkapi formulir di aplikasi ini (Nama, Mapel, dll) lalu klik tombol hijau besar <b>"GENERATE JSON SPEC"</b>.</p>
                     </div>
                 </div>
-                <div class="flex items-start gap-4">
-                    <div class="bg-blue-100 text-blue-700 font-bold w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">2</div>
+                <div class="flex items-start gap-5 p-4 bg-white rounded-xl shadow-sm border border-gray-100">
+                    <div class="bg-blue-100 text-blue-700 font-black w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-lg">2</div>
                     <div>
-                        <h4 class="font-bold text-gray-800">Salin Otomatis</h4>
-                        <p class="text-sm text-gray-600">Klik tombol ikon <b>Salin JSON</b> di atas kotak teks hasil.</p>
+                        <h4 class="font-bold text-gray-800 text-lg">Salin Kode</h4>
+                        <p class="text-sm text-gray-600 mt-1">Di halaman hasil, klik tombol biru <b>"Salin"</b> di pojok kanan atas kotak kode berwarna hitam.</p>
                     </div>
                 </div>
-                <div class="flex items-start gap-4">
-                    <div class="bg-blue-100 text-blue-700 font-bold w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">3</div>
+                <div class="flex items-start gap-5 p-4 bg-white rounded-xl shadow-sm border border-gray-100">
+                    <div class="bg-blue-100 text-blue-700 font-black w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-lg">3</div>
                     <div>
-                        <h4 class="font-bold text-gray-800">Paste di AI</h4>
-                        <p class="text-sm text-gray-600">Buka Gemini, ChatGPT, atau Canva, lalu <b>Paste (Tempel)</b> JSON tersebut. AI akan membuatkan kode HTML lengkap.</p>
+                        <h4 class="font-bold text-gray-800 text-lg">Paste di AI</h4>
+                        <p class="text-sm text-gray-600 mt-1">Buka <b>Gemini</b>, <b>ChatGPT</b>, atau <b>Claude</b>. Tempel (Paste) kode tersebut. AI akan membuatkan file HTML game yang siap dimainkan.</p>
                     </div>
                 </div>
             </div>
-            <div class="p-4 border-t bg-gray-50 text-right">
-                <button onclick="closeInstructions()" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-700">Tutup</button>
+            <div class="p-5 border-t bg-white text-right">
+                <button onclick="closeInstructions()" class="bg-slate-800 text-white px-8 py-3 rounded-xl font-bold hover:bg-slate-900 transition">Saya Mengerti</button>
             </div>
         </div>
     </div>
 
     <!-- Welcome Modal -->
-    <div id="welcome-modal" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-md flex items-center justify-center z-[2000] p-4">
-        <div class="bg-white p-10 rounded-3xl shadow-2xl text-center max-w-lg border-t-8 border-blue-600 relative overflow-hidden">
-            <!-- Modal Background Shapes -->
-            <div class="absolute top-0 left-0 w-full h-full z-0 opacity-10 pointer-events-none">
-                <div class="shape shape-circle" style="top:10%; left:10%"></div>
-                <div class="shape shape-square" style="bottom:10%; right:10%"></div>
-            </div>
-            
+    <div id="welcome-modal" class="hidden fixed inset-0 bg-slate-900/80 backdrop-blur-md flex items-center justify-center z-[2000] p-4">
+        <div class="bg-white p-10 rounded-[2.5rem] shadow-2xl text-center max-w-lg border-t-8 border-blue-600 relative overflow-hidden">
             <div class="relative z-10">
-                <img src="https://i.imghippo.com/files/xYek7566NhY.png" class="h-24 mx-auto mb-6">
-                <h2 class="text-3xl font-black text-gray-800 mb-2">AKSES BERHASIL!</h2>
-                <p class="text-gray-600 mb-8 leading-relaxed">Selamat datang di <b>GENERATOR MEDIA K3S BEJI PASURUAN</b>. Siap membuat media pembelajaran interaktif?</p>
-                <button onclick="closeModal()" class="bg-blue-600 text-white px-10 py-4 rounded-2xl font-bold hover:bg-blue-700 transition w-full shadow-lg shadow-blue-200">MULAI GENERATE</button>
+                <div class="bg-blue-50 inline-block p-4 rounded-full mb-6">
+                    <img src="https://i.imghippo.com/files/xYek7566NhY.png" class="h-20 mx-auto">
+                </div>
+                <h2 class="text-3xl font-black text-gray-800 mb-3">AKSES BERHASIL!</h2>
+                <p class="text-gray-500 mb-8 leading-relaxed font-medium">Selamat datang di <b>GENERATOR MEDIA K3S BEJI</b>.<br>Mari buat media pembelajaran interaktif yang menyenangkan!</p>
+                <button onclick="closeModal()" class="bg-blue-600 text-white px-10 py-4 rounded-2xl font-bold hover:bg-blue-700 transition w-full shadow-lg shadow-blue-200">MULAI SEKARANG</button>
             </div>
         </div>
     </div>
@@ -631,11 +678,9 @@
 
         function copyToClipboard() {
             const text = document.getElementById('narration-text').innerText;
-            
-            // Fallback method using textarea (lebih robust untuk iframe/sandbox)
             const textArea = document.createElement("textarea");
             textArea.value = text;
-            textArea.style.position = "fixed";  // Avoid scrolling to bottom
+            textArea.style.position = "fixed";
             textArea.style.left = "-9999px";
             document.body.appendChild(textArea);
             textArea.focus();
@@ -646,33 +691,31 @@
                 if (successful) {
                     showCopyFeedback();
                 } else {
-                    // Try Navigator API if execCommand fails
-                    navigator.clipboard.writeText(text).then(showCopyFeedback).catch(err => {
-                        console.error('Failed to copy', err);
-                        alert("Gagal menyalin otomatis. Silakan blok teks dan salin manual (Ctrl+C).");
-                    });
+                    navigator.clipboard.writeText(text).then(showCopyFeedback);
                 }
             } catch (err) {
-                console.error('Fallback: Oops, unable to copy', err);
                 alert("Gagal menyalin. Silakan blok teks dan CTRL+C.");
             }
-            
             document.body.removeChild(textArea);
         }
 
         function showCopyFeedback() {
             const btn = document.getElementById('btn-copy');
             const btnText = document.getElementById('btn-copy-text');
-            const originalText = "Salin JSON";
+            const icon = btn.querySelector('i');
             
             btn.classList.remove('bg-blue-600');
             btn.classList.add('bg-green-600');
             btnText.innerText = "Tersalin!";
+            icon.classList.remove('fa-copy');
+            icon.classList.add('fa-check');
             
             setTimeout(() => {
                 btn.classList.remove('bg-green-600');
                 btn.classList.add('bg-blue-600');
-                btnText.innerText = originalText;
+                btnText.innerText = "Salin";
+                icon.classList.remove('fa-check');
+                icon.classList.add('fa-copy');
             }, 2000);
         }
 
@@ -702,15 +745,16 @@
             const customLogo = document.getElementById('gen-logo').value.trim() || DEFAULT_LOGO;
             const useImages = document.getElementById('gen-images').checked;
             
-            // Checkboxes
+            // New Inputs
+            const deviceMode = document.querySelector('input[name="devicemode"]:checked').value;
+            const orientation = document.querySelector('input[name="orientation"]:checked').value;
+            
             const diffs = Array.from(document.querySelectorAll('input[name="diff"]:checked')).map(cb => cb.value);
             const difficultyText = diffs.length > 0 ? diffs.join(", ") : "Standar";
 
-            // Visual Game Type Checkboxes
             const gameTypes = Array.from(document.querySelectorAll('input[name="gametype"]:checked')).map(cb => cb.value);
             const visualStyleText = gameTypes.length > 0 ? gameTypes.join(", ") : "Flat Design (Default)";
 
-            // Radio Buttons
             const interactionMode = document.querySelector('input[name="interaction"]:checked').value;
             let interactionDesc = "";
             let buttonPreviewText = "";
@@ -728,10 +772,54 @@
 
             const subjectIcon = getSubjectIcon(subject);
 
-            // Construct JSON Object
+            // LOGIC FOR DEVICE MODE
+            let layoutDesc = "";
+            let structureDesc = "";
+            let scoringDesc = "";
+            let progressBarsDesc = "";
+            let randomizationDesc = "";
+
+            if (deviceMode === "IFP") {
+                layoutDesc = `${orientation} Fullscreen (100vw x 100vh)`;
+                structureDesc = "Split Screen (Horizontal 50:50) - Left Panel (Player A) & Right Panel (Player B). Display: flex; flex-direction: row;";
+                scoringDesc = "Dual Progress Bars (Independent for A and B)";
+                progressBarsDesc = "Two separate bars inside respective player panels";
+                randomizationDesc = "Each panel displays different random questions independently. No duplicates active simultaneously.";
+                
+                document.getElementById('visual-device-mode').innerText = "IFP MODE (SPLIT)";
+                
+                const container = document.getElementById('layout-preview-container');
+                container.classList.remove('single-screen');
+                container.classList.add('split-screen');
+                
+                document.getElementById('panel-b').classList.remove('hidden');
+                document.getElementById('panel-a').classList.remove('w-full', 'h-full');
+                
+                document.getElementById('label-player-a').innerText = "PLAYER A";
+                document.getElementById('label-progres-a').innerText = "PROGRES";
+
+            } else {
+                layoutDesc = `${orientation} Viewport (Responsive)`;
+                structureDesc = "Single View Container (Centered). One active question area.";
+                scoringDesc = "Single Global Progress Bar (Top of Screen)";
+                progressBarsDesc = "One main progress bar at top";
+                randomizationDesc = "Single stream of random questions.";
+
+                document.getElementById('visual-device-mode').innerText = `SELULER (${orientation.toUpperCase()})`;
+                
+                const container = document.getElementById('layout-preview-container');
+                container.classList.remove('split-screen');
+                container.classList.add('single-screen');
+                
+                document.getElementById('panel-b').classList.add('hidden');
+                
+                document.getElementById('label-player-a').innerText = "SINGLE PLAYER";
+                document.getElementById('label-progres-a').innerText = "SKOR";
+            }
+
             const gameSpec = {
                 "role": "Senior Front-End Developer",
-                "task": "Create Single File HTML5 Educational Game for Interactive Flat Panel",
+                "task": "Create Single File HTML5 Educational Game",
                 "outputFormat": "Single HTML file containing HTML, CSS (Tailwind), and JS",
                 "context": {
                     "appName": appName,
@@ -739,6 +827,8 @@
                     "subject": `${subject} ${subjectIcon}`,
                     "topic": material,
                     "difficulty": difficultyText,
+                    "deviceMode": deviceMode,
+                    "orientation": orientation,
                     "assets": {
                         "logoUrl": customLogo,
                         "footerText": footer
@@ -748,17 +838,17 @@
                     "framework": "Tailwind CSS via CDN",
                     "font": "Google Font 'Poppins'",
                     "visualStyle": visualStyleText,
-                    "layout": "Landscape Fullscreen (100vw x 100vh), overflow-hidden",
-                    "structure": "Split Screen (Horizontal 50:50) - Left Panel (Player A) & Right Panel (Player B). Display: flex; flex-direction: row;",
+                    "layout": layoutDesc,
+                    "structure": structureDesc,
                     "style": "Modern, Clean, Child-friendly, Floating Background Shapes Animation"
                 },
                 "gameplayLogic": {
                     "questionCount": parseInt(count),
-                    "randomization": "Each panel displays different random questions independently. No duplicates active simultaneously.",
+                    "randomization": randomizationDesc,
                     "interactionMode": interactionDesc,
                     "useImagesInQuestions": useImages,
-                    "scoring": "Dual Progress Bars (Independent for A and B)",
-                    "winCondition": "First to 100% triggers Fullscreen Confetti overlay"
+                    "scoring": scoringDesc,
+                    "winCondition": "Reaching 100% triggers Fullscreen Confetti overlay"
                 },
                 "uiComponents": {
                     "panelStructure": {
@@ -766,7 +856,7 @@
                         "bottom": "Interaction Area (Buttons)"
                     },
                     "header": "Display App Name and Logo",
-                    "progressBars": "Two separate bars inside respective player panels"
+                    "progressBars": progressBarsDesc
                 },
                 "technicalRequirements": [
                     "Must be a valid single HTML file.",
@@ -776,7 +866,6 @@
                 ]
             };
 
-            // Update Visuals
             document.getElementById('narration-text').innerText = JSON.stringify(gameSpec, null, 2);
             document.getElementById('visual-app-name').innerText = appName.toUpperCase();
             document.getElementById('visual-grade').innerText = `KELAS ${grade}`;
@@ -784,15 +873,13 @@
             document.getElementById('visual-icon').innerText = subjectIcon;
             document.getElementById('visual-footer-logo').src = customLogo;
 
-            // PREVIEW CONTENT UPDATE FOR IMAGES
-            const imgIcon = useImages ? '<div class="mb-2 text-4xl text-blue-300 opacity-50"><i class="fa-regular fa-image"></i></div>' : '';
+            const imgIcon = useImages ? '<div class="mb-2 text-3xl text-blue-200 opacity-50"><i class="fa-regular fa-image"></i></div>' : '';
 
             document.getElementById('preview-content-a').innerHTML = `${imgIcon}[Pertanyaan Acak Tentang ${material}]`;
             document.getElementById('preview-content-b').innerHTML = `${imgIcon}[Pertanyaan Acak Tentang ${material}]`;
             document.getElementById('preview-buttons-a').innerText = buttonPreviewText;
             document.getElementById('preview-buttons-b').innerText = buttonPreviewText;
             
-            // Reset & Switch View
             document.getElementById('visual-bar-a').style.width = "0%";
             document.getElementById('visual-bar-b').style.width = "0%";
             document.getElementById('score-text-a').innerText = "0%";
@@ -801,16 +888,17 @@
             document.getElementById('generator-section').classList.add('hidden');
             document.getElementById('narration-section').classList.remove('hidden');
             
-            // Preview Animation
             setTimeout(() => {
                 document.getElementById('visual-bar-a').style.width = "40%";
                 document.getElementById('score-text-a').innerText = "40%";
             }, 500);
             
-            setTimeout(() => {
-                document.getElementById('visual-bar-b').style.width = "70%";
-                document.getElementById('score-text-b').innerText = "70%";
-            }, 800);
+            if(deviceMode === "IFP") {
+                setTimeout(() => {
+                    document.getElementById('visual-bar-b').style.width = "70%";
+                    document.getElementById('score-text-b').innerText = "70%";
+                }, 800);
+            }
         }
 
         function backToGenerator() {
@@ -824,7 +912,6 @@
             document.getElementById('score-text-a').innerText = "100%";
             document.getElementById('score-text-b').innerText = "100%";
             
-            // Efek Sprinkle
             for(let i=0; i<100; i++) {
                 const confetti = document.createElement('div');
                 confetti.classList.add('confetti');
