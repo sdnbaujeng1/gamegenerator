@@ -6,7 +6,6 @@
     <title>Game Generator K3S BEJI</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Highlight.js for code syntax highlighting -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
     
@@ -170,116 +169,11 @@
 </head>
 <body class="overflow-x-hidden">
 
-    <!-- Section: Login -->
-    <div id="login-section" class="flex items-center justify-center h-screen relative z-10">
-        <div class="glass-panel p-10 rounded-3xl shadow-2xl w-96 transform transition-all hover:scale-[1.01]">
-            <div class="text-center mb-8">
-                <!-- Logo: Circular Line Animation -->
-                <div class="relative inline-flex justify-center items-center mb-6">
-                    <!-- Outer rotating ring -->
-                    <div class="absolute inset-0 rounded-full border-[3px] border-transparent border-t-blue-500 border-r-indigo-400/50 animate-spin-slow"></div>
-                    <!-- Inner rotating ring (reverse) -->
-                    <div class="absolute inset-3 rounded-full border-[3px] border-transparent border-b-pink-500 border-l-purple-400/50 animate-spin-reverse"></div>
-                    <div class="p-4 relative z-10">
-                        <img src="https://lh3.googleusercontent.com/d/1UXDrhKgeSjfFks_oXIMOVYgxFG_Bh1nm" alt="Logo K3S" class="h-28 md:h-36 w-auto object-contain drop-shadow-xl">
-                    </div>
-                </div>
-                <h1 class="text-2xl font-black text-slate-800 tracking-tight drop-shadow-sm">GAME CREATOR</h1>
-                <div class="h-1.5 w-24 bg-gradient-to-r from-blue-400 to-indigo-500 mx-auto rounded-full mt-3 mb-3"></div>
-                <p class="text-indigo-600 font-bold tracking-[0.2em] text-sm">BEJI PASURUAN</p>
-            </div>
-            
-            <div class="space-y-5">
-                <div class="relative group">
-                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-indigo-400 group-focus-within:text-indigo-600"><i class="fa-regular fa-user text-lg"></i></div>
-                    <input type="text" id="username" placeholder="Username" class="w-full pl-12 pr-4 h-14 border-2 border-slate-200 rounded-xl bg-white focus:border-indigo-500 outline-none font-medium text-slate-700 shadow-sm transition-all">
-                </div>
-                <div class="relative group">
-                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-pink-400 group-focus-within:text-pink-600"><i class="fa-solid fa-lock text-lg"></i></div>
-                    <input type="password" id="password" placeholder="Password" class="w-full pl-12 pr-4 h-14 border-2 border-slate-200 rounded-xl bg-white focus:border-pink-500 outline-none font-medium text-slate-700 shadow-sm transition-all">
-                </div>
-
-                <button onclick="handleLogin()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 rounded-xl font-bold hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg btn-3d flex items-center justify-center gap-2 text-lg">
-                    MASUK SISTEM <i class="fa-solid fa-arrow-right-to-bracket"></i>
-                </button>
-            </div>
-            <p id="login-error" class="text-red-500 text-xs mt-4 text-center hidden font-medium bg-red-50 py-2 rounded-lg border border-red-100">
-                <i class="fa-solid fa-circle-exclamation mr-1"></i> Username atau Password salah!
-            </p>
-        </div>
-    </div>
-
-    <!-- Section: Admin Dashboard -->
-    <div id="admin-section" class="hidden min-h-screen p-4 md:p-8 bg-slate-100">
-        <div class="max-w-6xl mx-auto">
-            <div class="flex justify-between items-center mb-8 bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600"><i class="fa-solid fa-users-gear"></i></div>
-                    <h2 class="text-2xl font-black text-slate-800">ADMIN PANEL</h2>
-                </div>
-                <button onclick="logout()" class="bg-red-500 text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-red-600 shadow-lg shadow-red-200 transition btn-3d"><i class="fa-solid fa-right-from-bracket mr-2"></i> Logout</button>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- User Management -->
-                <div class="bg-white p-6 rounded-3xl shadow-xl border border-slate-200">
-                    <div class="flex items-center gap-3 mb-6 border-b pb-4">
-                        <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600"><i class="fa-solid fa-user-shield"></i></div>
-                        <h3 class="text-lg font-bold text-slate-700">Manajemen User</h3>
-                    </div>
-                    
-                    <div class="bg-slate-50 p-4 rounded-xl mb-6 border border-slate-200">
-                        <label class="text-xs font-bold text-slate-500 mb-2 block uppercase">Tambah User Baru</label>
-                        <div class="flex gap-2">
-                            <input type="text" id="new-user" placeholder="Username" class="flex-1 border-2 border-slate-200 p-3 rounded-xl text-sm outline-none focus:border-green-500 transition">
-                            <input type="text" id="new-pass" placeholder="Password" class="flex-1 border-2 border-slate-200 p-3 rounded-xl text-sm outline-none focus:border-green-500 transition">
-                            <button onclick="addUser()" class="bg-green-500 text-white px-4 rounded-xl font-bold hover:bg-green-600 shadow-md btn-3d"><i class="fa-solid fa-plus"></i></button>
-                        </div>
-                    </div>
-
-                    <div class="overflow-hidden rounded-xl border border-slate-200">
-                        <table class="w-full text-sm text-left">
-                            <thead class="bg-slate-100 text-slate-600 uppercase font-bold text-xs">
-                                <tr>
-                                    <th class="px-4 py-3">Username</th>
-                                    <th class="px-4 py-3">Role</th>
-                                    <th class="px-4 py-3 text-right">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="user-table-body" class="divide-y divide-slate-100 bg-white"></tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- API Key Management (HIDDEN AS PER REQUEST) -->
-                <div class="hidden bg-white p-6 rounded-3xl shadow-xl border border-slate-200 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-yellow-100 rounded-full blur-3xl opacity-50 -mr-10 -mt-10 pointer-events-none"></div>
-                    <div class="flex items-center gap-3 mb-6 border-b pb-4 relative z-10">
-                        <div class="w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600"><i class="fa-solid fa-key"></i></div>
-                        <h3 class="text-lg font-bold text-slate-700">Konfigurasi API AI (Gemini)</h3>
-                    </div>
-                    <div class="space-y-5 relative z-10">
-                        <p class="text-sm text-slate-500 italic">API Integration has been disabled.</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="mt-8 text-center pb-8">
-                <button onclick="goToGenerator()" class="bg-indigo-600 text-white px-10 py-4 rounded-2xl font-black text-lg shadow-xl shadow-indigo-200 hover:bg-indigo-700 transition btn-3d transform hover:scale-[1.02]">
-                    BUKA GENERATOR GAME <i class="fa-solid fa-arrow-right ml-2"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Section: Generator Form -->
-    <div id="generator-section" class="hidden min-h-screen p-4 md:p-8">
+    <div id="generator-section" class="min-h-screen p-4 md:p-8">
         <div class="max-w-[90rem] mx-auto glass-panel rounded-[2.5rem] shadow-2xl p-6 md:p-10 relative overflow-hidden">
-            <!-- Decorative blobs -->
             <div class="absolute -top-20 -right-20 w-64 h-64 bg-purple-200 rounded-full blur-3xl opacity-30 pointer-events-none"></div>
             <div class="absolute -bottom-20 -left-20 w-64 h-64 bg-blue-200 rounded-full blur-3xl opacity-30 pointer-events-none"></div>
 
-            <!-- HEADER -->
             <div class="flex justify-between items-center mb-8 relative z-10">
                 <div class="flex items-center gap-6">
                     <div class="relative flex items-center justify-center p-2">
@@ -294,15 +188,9 @@
                         </div>
                     </div>
                 </div>
-                <div id="admin-btn-container" class="hidden">
-                    <button onclick="showAdmin()" class="bg-white text-slate-600 px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-slate-50 border border-slate-200 shadow-sm transition btn-3d">
-                        <i class="fa-solid fa-gear mr-2 text-slate-400"></i> Settings
-                    </button>
-                </div>
             </div>
             
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-8 relative z-10">
-                <!-- Kolom Kiri -->
                 <div class="input-frame">
                     <div class="frame-title mb-6 border-b pb-4 flex items-center gap-3">
                         <div class="bg-gradient-to-br from-indigo-500 to-purple-600 text-white w-10 h-10 flex items-center justify-center rounded-xl shadow-lg text-lg"><i class="fa-solid fa-fingerprint"></i></div> 
@@ -360,7 +248,6 @@
                         </div>
                     </div>
 
-                    <!-- Level Kognitif Selection -->
                     <div class="mb-5">
                         <label class="form-label">Level Kognitif Soal</label>
                         <div class="grid grid-cols-2 gap-3">
@@ -412,18 +299,15 @@
                     </div>
                 </div>
 
-                <!-- Kolom Kanan -->
                 <div class="input-frame">
                     <div class="frame-title mb-6 border-b pb-4 flex items-center gap-3">
                         <div class="bg-gradient-to-br from-orange-400 to-red-500 text-white w-10 h-10 flex items-center justify-center rounded-xl shadow-lg text-lg"><i class="fa-solid fa-sliders"></i></div>
                         <h3 class="text-xl font-bold text-slate-800">Konfigurasi Game</h3>
                     </div>
 
-                    <!-- 10 Game Templates Grid 2x2 Style -->
                     <div class="mb-5">
                          <label class="form-label">Template Game (Pilih Salah Satu)</label>
                          <div class="h-80 overflow-y-auto custom-scroll pr-2 grid grid-cols-2 gap-3">
-                             <!-- Cards -->
                              <label class="relative cursor-pointer group">
                                  <input type="radio" name="game_model" value="adventure" class="peer sr-only" checked>
                                  <div class="game-card">
@@ -628,7 +512,6 @@
                 </div>
             </div>
 
-            <!-- Single Generate Button -->
             <div class="mt-8 pt-6 border-t border-gray-100">
                 <button onclick="startGeneration()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-5 rounded-2xl font-black text-xl md:text-2xl hover:from-blue-700 hover:to-indigo-800 shadow-xl shadow-blue-200 transition-all btn-3d flex items-center justify-center gap-3 group transform hover:scale-[1.01]">
                     <span class="bg-white/20 p-2.5 rounded-full"><i class="fa-solid fa-wand-magic-sparkles group-hover:rotate-12 transition"></i></span>
@@ -641,7 +524,6 @@
         </div>
     </div>
 
-    <!-- Section: Loading Modal -->
     <div id="loading-modal" class="hidden modal-overlay z-[6000]">
         <div class="bg-white p-10 rounded-[2.5rem] shadow-2xl flex flex-col items-center max-w-sm text-center border-4 border-blue-100 relative overflow-hidden">
             <div class="absolute inset-0 bg-blue-50/50 z-0"></div>
@@ -653,7 +535,6 @@
         </div>
     </div>
 
-    <!-- Section: Result Output -->
     <div id="result-section" class="hidden min-h-screen bg-slate-900 text-white flex flex-col h-screen fixed inset-0 z-[4000]">
         <div class="h-16 bg-slate-800 flex items-center justify-between px-6 border-b border-slate-700 shadow-lg z-20">
             <div class="flex items-center gap-4">
@@ -678,12 +559,10 @@
         </div>
 
         <div class="flex-1 relative overflow-hidden bg-[#1e1e1e]">
-            <!-- Visual Summary Preview -->
             <div id="tab-preview" class="hidden w-full h-full bg-white relative">
                 <iframe id="game-preview-frame" class="w-full h-full border-none relative z-10" sandbox="allow-scripts allow-modals allow-same-origin allow-forms allow-popups"></iframe>
             </div>
             
-            <!-- Raw Code -->
             <div id="tab-code" class="w-full h-full overflow-auto bg-[#1e1e1e] p-6">
                 <pre><code id="generated-code" class="language-json rounded-xl shadow-xl"></code></pre>
             </div>
@@ -692,99 +571,9 @@
 
     <script>
         // --- DATA & STATE MANAGEMENT ---
-        const DB_VERSION = "v1";
-        const DEFAULT_USERS = [
-            { user: 'admin', pass: 'admin', role: 'admin' },
-            { user: 'game', pass: 'beji', role: 'user' }
-        ];
-
-        if (!localStorage.getItem('k3s_users')) {
-            localStorage.setItem('k3s_users', JSON.stringify(DEFAULT_USERS));
-        }
-        
-        let currentUser = null;
         let generatedContent = "";
         let generatedSpec = null;
         
-        // --- AUTH FUNCTIONS ---
-        function handleLogin() {
-            const u = document.getElementById('username').value;
-            const p = document.getElementById('password').value;
-            const users = JSON.parse(localStorage.getItem('k3s_users'));
-            const found = users.find(x => x.user === u && x.pass === p);
-            
-            if (found) {
-                currentUser = found;
-                document.getElementById('login-section').classList.add('hidden');
-                if (found.role === 'admin') {
-                    renderAdminPanel();
-                    document.getElementById('admin-section').classList.remove('hidden');
-                } else {
-                    document.getElementById('generator-section').classList.remove('hidden');
-                    document.getElementById('admin-btn-container').classList.add('hidden');
-                }
-            } else {
-                const err = document.getElementById('login-error');
-                err.classList.remove('hidden');
-                setTimeout(() => err.classList.add('hidden'), 3000);
-            }
-        }
-
-        function logout() { location.reload(); }
-        
-        function goToGenerator() {
-            document.getElementById('admin-section').classList.add('hidden');
-            document.getElementById('generator-section').classList.remove('hidden');
-            if(currentUser && currentUser.role === 'admin') document.getElementById('admin-btn-container').classList.remove('hidden');
-        }
-
-        function showAdmin() {
-            if(currentUser && currentUser.role === 'admin') {
-                document.getElementById('generator-section').classList.add('hidden');
-                document.getElementById('admin-section').classList.remove('hidden');
-            }
-        }
-
-        // --- ADMIN FUNCTIONS ---
-        function renderAdminPanel() {
-            const users = JSON.parse(localStorage.getItem('k3s_users'));
-            const tbody = document.getElementById('user-table-body');
-            tbody.innerHTML = '';
-            users.forEach((u, index) => {
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50 border-b border-slate-50 transition";
-                tr.innerHTML = `
-                    <td class="px-4 py-3 font-bold text-slate-700 flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-xs"><i class="fa-solid fa-user"></i></div> ${u.user}</td>
-                    <td class="px-4 py-3"><span class="${u.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'} px-2 py-1 rounded-md text-xs font-bold uppercase tracking-wider">${u.role}</span></td>
-                    <td class="px-4 py-3 text-right">
-                        ${u.role !== 'admin' ? `<button onclick="deleteUser(${index})" class="bg-red-50 text-red-500 hover:bg-red-500 hover:text-white w-8 h-8 rounded-lg transition"><i class="fa-solid fa-trash"></i></button>` : '<span class="text-gray-300 text-xs italic">Default</span>'}
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function addUser() {
-            const u = document.getElementById('new-user').value;
-            const p = document.getElementById('new-pass').value;
-            if(!u || !p) return alert("Isi username dan password dengan benar.");
-            const users = JSON.parse(localStorage.getItem('k3s_users'));
-            users.push({ user: u, pass: p, role: 'user' });
-            localStorage.setItem('k3s_users', JSON.stringify(users));
-            document.getElementById('new-user').value = '';
-            document.getElementById('new-pass').value = '';
-            renderAdminPanel();
-        }
-
-        function deleteUser(index) {
-            if(confirm("Hapus user ini?")) {
-                const users = JSON.parse(localStorage.getItem('k3s_users'));
-                users.splice(index, 1);
-                localStorage.setItem('k3s_users', JSON.stringify(users));
-                renderAdminPanel();
-            }
-        }
-
         // --- PROMPT GENERATION LOGIC ---
         function generatePromptText(data) {
             // Base Role (English)
@@ -809,7 +598,6 @@
 - Output: Single index.html file with embedded CSS, JS, and inline SVG assets (in <defs>). No external dependencies.
 - Language: Standard Indonesian (interface), child-friendly tone.
 - Responsive: Mobile-first, ${data.orientation} orientation, supports IFP & Mobile (${data.deviceMode}).
-- Login/Input: ${data.loginInstruction}
 - Data: LocalStorage for progress, no ads/tracking.
 - Performance: Lightweight (< 300KB).
 - Content: Generic themes, no specific IP.
@@ -964,20 +752,12 @@ ${ifpConstraint}
             const audioEnabled = document.getElementById('audio-toggle').checked;
             const timerVal = document.getElementById('gen-timer').value || 10;
 
-            // 2. Logic for Instructions
-            let loginInstructions = "";
-            if (players === 1) {
-                loginInstructions = "Single Player. Display a name input at the start. Save name for final certificate.";
-            } else {
-                loginInstructions = `Multiplayer (${players} Players). Display ${players} separate name inputs at the start (Player 1 to ${players}). Ensure clearly defined turn-based UI or split-screen if possible on ${deviceMode}.`;
-            }
-
             const winCondition = "If User Wins: Show a full-screen Modal Popup. Content: User Name, Total Final Score, Stars, and festive CSS Confetti/Sprinkles animation.";
 
             const data = {
                 appName, subject, grade: `Kelas ${gradeVal} SD`, objective, material, cogLevel, footerText,
                 gameModel, deviceMode, orientation, scorePoint, scoreBar, players, count: questionCount, audio: audioEnabled,
-                timer: timerVal, loginInstruction: loginInstructions, winCondition
+                timer: timerVal, winCondition
             };
 
             // 3. Generate Content
@@ -1054,15 +834,6 @@ ${ifpConstraint}
                                 <div class="w-1/2">
                                     <label class="text-[10px] font-bold text-slate-400 uppercase">Grade</label>
                                     <p class="font-bold text-slate-700">${data.grade}</p>
-                                </div>
-                            </div>
-                            
-                            <div>
-                                <label class="text-[10px] font-bold text-slate-400 uppercase">Instructions Logic</label>
-                                <div class="bg-blue-50 p-3 rounded-lg border border-blue-100 mt-1">
-                                    <p class="text-xs text-blue-800 font-medium leading-relaxed">
-                                        <i class="fa-solid fa-users mr-1"></i> ${data.loginInstruction}
-                                    </p>
                                 </div>
                             </div>
 
@@ -1158,5 +929,3 @@ ${ifpConstraint}
     </script>
 </body>
 </html>
-
-
